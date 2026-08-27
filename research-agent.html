@@ -96,7 +96,11 @@ a { color: inherit; text-decoration: none; }
 .tile {
   flex: 0 0 44px; height: 44px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 1.15rem; font-weight: 800;
+}
+.dolphin {
+  display: block; width: 68%; height: 68%; background: #fff;
+  -webkit-mask: url(dolphin.png) center/contain no-repeat;
+  mask: url(dolphin.png) center/contain no-repeat;
 }
 .row-body { min-width: 0; }
 .row-title { margin: 0; font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; }
