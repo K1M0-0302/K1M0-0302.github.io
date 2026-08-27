@@ -19,6 +19,7 @@
   /* 카드는 「반투명 흰 베일」이다 — 배경 위에 늘 같은 비율로 얹히므로, 카드가 화면을 덮는
      상세 페이지와 배경이 많이 보이는 목록 페이지의 밝기가 구조적으로 같아진다. */
   --surface: rgba(255, 255, 255, .09); --border: #35708f;
+  --hairline: rgba(255, 255, 255, .13);  /* 유리판 가장자리 — UI 부품 윤곽선처럼 보이지 않게 */
   --text: #e7f3f9; --muted: #a3c3d3; --accent: #52c8e8;
   /* 배경 위에 직접 놓이는 작은 액센트 글자용 */
   --accent-strong: #7fd8f2;
@@ -163,12 +164,13 @@ a { color: inherit; text-decoration: none; }
 .row {
   display: flex; gap: 14px; align-items: center;
   padding: 14px 18px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; backdrop-filter: blur(6px);
-  box-shadow: 0 3px 12px rgba(10, 90, 125, .07);
-  transition: box-shadow .2s ease, transform .2s ease;
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: 10px; backdrop-filter: blur(6px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
+  transition: background .2s ease, border-color .2s ease;
 }
-.row:hover { box-shadow: 0 10px 26px rgba(10, 90, 125, .13); transform: translateY(-1px); }
+/* 카드는 링크라 반응이 있어야 하지만, 떠오르는 대신 물빛이 밝아지는 정도로만 */
+.row:hover { background: rgba(255, 255, 255, .15); border-color: rgba(255, 255, 255, .24); }
 .row::after {
   content: "→"; margin-left: auto; color: var(--muted);
   font-size: 1.05rem; font-weight: 700;
@@ -204,14 +206,14 @@ a { color: inherit; text-decoration: none; }
 .title-ko { color: var(--muted); font-size: .55em; font-weight: 500; margin-left: 6px; }
 /* 박스 사이를 목록 카드 간격(12px)보다 넉넉히 벌려 배경 물빛이 그만큼 드러나게 한다 */
 .body { display: flex; flex-direction: column; gap: 20px; }
+/* 본문 박스는 읽는 종이지 눌리는 버튼이 아니다 — 색 띠(알림 상자 관용구)·그림자·호버 반응을 빼고
+   물 위에 얹힌 유리판처럼 가는 테두리와 윗면 하이라이트만 남긴다. */
 .box {
-  background: var(--surface); border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
-  border-radius: 14px; padding: 18px 22px; backdrop-filter: blur(6px);
-  box-shadow: 0 4px 16px rgba(10, 90, 125, .09);
-  transition: box-shadow .2s ease, transform .2s ease;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 10px; padding: 20px 24px; backdrop-filter: blur(6px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
 }
-.box:hover { box-shadow: 0 10px 26px rgba(10, 90, 125, .13); transform: translateY(-1px); }
 .body h2 {
   margin: 0 0 8px; font-size: 1.35rem; font-weight: 700;
   color: var(--accent); letter-spacing: .01em;
@@ -232,7 +234,8 @@ a { color: inherit; text-decoration: none; }
 /* 카드 클릭 순간: 카드에서 물결이 번진다 */
 .row.splashing {
   transform: scale(.985);
-  box-shadow: 0 0 0 3px var(--accent-soft), 0 10px 28px rgba(10, 90, 125, .16);
+  /* 어두운 배경에선 짙은 그림자가 안 보인다 — 물빛 테두리로 눌린 것을 알린다 */
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 .row.splashing::before {
   content: ""; position: absolute; inset: 0; border-radius: 12px;
