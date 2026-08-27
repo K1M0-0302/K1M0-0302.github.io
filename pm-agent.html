@@ -6,7 +6,7 @@
 <title>기획 문서 에이전트 (pm-agent) — K!M0&#x27;s Page</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Jua&family=Quicksand:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Jua&family=Nunito:wght@400;700&display=swap">
 <style>
 /* 밤바다 고정 팔레트 (2026-08-27 사용자 결정).
    `prefers-color-scheme` 분기를 두지 않는다 — 보는 사람의 다크/라이트 설정에 따라 어떤 컴퓨터에선
@@ -30,17 +30,18 @@
 body {
   margin: 0; background: var(--bg) var(--bg-grad) no-repeat fixed;
   color: var(--text);
-  font-family: "Quicksand", "Jua", -apple-system, "Segoe UI",
+  font-family: "Nunito", "Jua", -apple-system, "Segoe UI",
     "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
   /* 주아는 글자가 꽉 차 보여 줄 간격을 넉넉히 준다 */
-  line-height: 1.9; letter-spacing: .01em;
+  /* 자간은 여기 한 곳에서만 정한다 — 요소마다 다르게 주면 들쭉날쭉해 보인다 */
+  line-height: 1.9; letter-spacing: normal;
   -webkit-font-smoothing: antialiased; min-height: 100vh;
 }
 a { color: inherit; text-decoration: none; }
 /* 손글씨풍 개구는 사이트 정체성(이름·페이지 제목·카드 제목)에만 쓴다 — 획이 가늘어 한 급 크게 잡는다.
    본문은 절 제목까지 전부 본문 서체로 읽히게 둔다(섞으면 한 화면에 두 서체가 번갈아 나와 산만하다). */
 .brand, .hero h1, .hero .tagline, .section-label, .row-title, .article-title {
-  font-family: "Gaegu", "Quicksand", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-family: "Gaegu", "Nunito", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 }
 .nav {
   position: sticky; top: 0; z-index: 10;
@@ -51,9 +52,9 @@ a { color: inherit; text-decoration: none; }
   max-width: 760px; margin: 0 auto; padding: 14px 24px;
   display: flex; justify-content: space-between; align-items: center;
 }
-.brand { font-weight: 700; font-size: 1.15rem; letter-spacing: 0; }
+.brand { font-weight: 700; font-size: 1.15rem; }
 .links { display: flex; gap: 18px; }
-.links a { color: var(--muted); font-size: .95rem; font-weight: 600; }
+.links a { color: var(--muted); font-size: .95rem; font-weight: 400; }
 .links a:hover { color: var(--accent); }
 .hero { max-width: 760px; margin: 0 auto; padding: 80px 24px 32px; }
 .eyebrow {
@@ -62,7 +63,7 @@ a { color: inherit; text-decoration: none; }
 }
 .hero h1 {
   margin: 0; font-size: clamp(2.7rem, 7.5vw, 4.2rem);
-  font-weight: 700; letter-spacing: 0;
+  font-weight: 700;
 }
 .hero .tagline { margin: 10px 0 0; font-size: 1.6rem; color: var(--muted); }
 /* 하위 페이지 머리 — 구조는 홈과 같고 높이만 낮춘다 */
@@ -155,9 +156,9 @@ a { color: inherit; text-decoration: none; }
 .group { display: flex; flex-direction: column; gap: 12px; scroll-margin-top: 72px; }
 .group + .group { margin-top: 24px; }
 .section-label {
-  margin: 0 0 4px; font-weight: 700; font-size: 1.35rem; letter-spacing: 0;
+  margin: 0 0 4px; font-weight: 700; font-size: 1.35rem;
 }
-.section-label span { color: var(--muted); font-weight: 500; font-size: .9rem; margin-left: 6px; }
+.section-label span { color: var(--muted); font-weight: 400; font-size: .9rem; margin-left: 6px; }
 .feed {
   max-width: 760px; margin: 0 auto; padding: 8px 24px 64px;
   display: flex; flex-direction: column; gap: 20px;
@@ -188,11 +189,11 @@ a { color: inherit; text-decoration: none; }
   mask: url(boat-icon.png) center/contain no-repeat;
 }
 .row-body { min-width: 0; }
-.row-title { margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 0; }
-.more { color: var(--accent-strong); font-weight: 700; font-size: .9rem; }
+.row-title { margin: 0; font-size: 1.3rem; font-weight: 700; }
+.more { color: var(--accent-strong); font-weight: 400; font-size: .9rem; }
 .overflow > summary {
   cursor: pointer; list-style: none; text-align: center;
-  color: var(--accent); font-weight: 700; font-size: .9rem;
+  color: var(--accent); font-weight: 400; font-size: .9rem;
   padding: 10px; border: 1px dashed var(--border); border-radius: 12px;
 }
 .overflow > summary::-webkit-details-marker { display: none; }
@@ -201,10 +202,10 @@ a { color: inherit; text-decoration: none; }
 .article { max-width: 760px; margin: 0 auto; padding: 28px 24px 64px; }
 .article-title {
   margin: 6px 0 20px; font-size: clamp(2.1rem, 6vw, 3rem);
-  font-weight: 700; letter-spacing: 0;
+  font-weight: 700;
 }
 .back { display: inline-block; margin-top: 32px; }
-.title-ko { color: var(--muted); font-size: .55em; font-weight: 500; margin-left: 6px; }
+.title-ko { color: var(--muted); font-size: .55em; font-weight: 400; margin-left: 6px; }
 /* 박스 사이를 목록 카드 간격(12px)보다 넉넉히 벌려 배경 물빛이 그만큼 드러나게 한다 */
 .body { display: flex; flex-direction: column; gap: 20px; }
 /* 본문 박스는 읽는 종이지 눌리는 버튼이 아니다 — 색 띠(알림 상자 관용구)·그림자·호버 반응을 빼고
@@ -219,15 +220,15 @@ a { color: inherit; text-decoration: none; }
    주아는 굵기가 400 하나뿐이라 700 을 걸면 합성 볼드로 뭉개진다 — 위계는 크기와 색으로 준다. */
 .body { font-size: 1.02rem; }
 .body h2 {
-  margin: 0 0 10px; font-size: 1.2rem; font-weight: 500;
-  color: var(--accent-strong); letter-spacing: .01em;
+  margin: 0 0 10px; font-size: 1.2rem; font-weight: 400;
+  color: var(--accent-strong);
 }
-.body h3 { margin: 18px 0 6px; font-size: 1.06rem; font-weight: 500; color: var(--text); }
+.body h3 { margin: 18px 0 6px; font-size: 1.06rem; font-weight: 400; color: var(--text); }
 .body p { margin: 8px 0; }
 .body ul { margin: 8px 0; padding-left: 22px; }
 .body li { margin: 6px 0; }
 /* 굵게 표시는 색을 밝혀서 구분한다(합성 볼드를 피한다) */
-.body strong { font-weight: 500; color: #ffffff; }
+.body strong { font-weight: 400; color: #ffffff; }
 .body code {
   background: var(--code-bg); padding: 2px 6px; border-radius: 6px;
   font-size: .88em; font-family: ui-monospace, Consolas, monospace;
