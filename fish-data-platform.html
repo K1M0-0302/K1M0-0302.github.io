@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>어업 데이터·직거래 플랫폼 (fish-data-platform) — K!M0&#x27;s Page</title>
+<style>
+:root {
+  --bg: #f2fbfe;
+  --bg-grad: linear-gradient(180deg, #f9fdfe 0%, #e9f7fc 40%, #d8f0f9 75%, #c8e9f6 100%);
+  --nav-bg: rgba(249, 253, 254, .8);
+  --surface: rgba(255, 255, 255, .88); --border: #d5eaf3;
+  --text: #123648; --muted: #567c8e; --accent: #009fd6;
+  --accent-soft: rgba(0, 159, 214, .12); --code-bg: #e9f5fa;
+  --splash: #4aa8cc;  /* 배경 물빛을 깊게 내린 전환용 바다색 */
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a2231;
+    --bg-grad: linear-gradient(180deg, #0a2231 0%, #103349 45%, #154059 100%);
+    --nav-bg: rgba(10, 34, 49, .8);
+    --surface: rgba(20, 47, 66, .82); --border: #275673;
+    --text: #e6f4fa; --muted: #9dbecd; --accent: #45cdf2;
+    --accent-soft: rgba(69, 205, 242, .16); --code-bg: #163a52;
+    --splash: #0c2d40;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg) var(--bg-grad) no-repeat fixed;
+  color: var(--text);
+  font-family: -apple-system, "Helvetica Neue", "Segoe UI",
+    "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  line-height: 1.7; -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--nav-bg);
+  backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 760px; margin: 0 auto; padding: 14px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.brand { font-weight: 800; letter-spacing: -0.01em; }
+.links { display: flex; gap: 18px; }
+.links a { color: var(--muted); font-size: .95rem; font-weight: 600; }
+.links a:hover { color: var(--accent); }
+.hero { max-width: 760px; margin: 0 auto; padding: 80px 24px 32px; }
+.eyebrow {
+  margin: 0 0 10px; color: var(--accent); font-size: .8rem;
+  font-weight: 700; letter-spacing: .18em;
+}
+.hero h1 {
+  margin: 0; font-size: clamp(2.2rem, 6vw, 3.4rem);
+  font-weight: 800; letter-spacing: -0.02em;
+}
+.hero .tagline { margin: 12px 0 0; font-size: 1.15rem; color: var(--muted); }
+.wave {
+  position: relative; height: 44px; overflow: hidden;
+  color: var(--accent-soft); margin: -8px 0 4px;
+}
+.wave svg {
+  position: absolute; bottom: 0; left: 0;
+  width: 200%; height: 44px; display: block;
+}
+.wave .w1 { animation: drift 11s linear infinite; }
+.wave .w2 { animation: drift 7s linear infinite reverse; opacity: .55; }
+@keyframes drift { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .wave svg { animation: none; } }
+.group { display: flex; flex-direction: column; gap: 12px; scroll-margin-top: 72px; }
+.group + .group { margin-top: 24px; }
+.section-label {
+  margin: 0 0 4px; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.01em;
+}
+.section-label span { color: var(--muted); font-weight: 500; font-size: .9rem; margin-left: 6px; }
+.feed {
+  max-width: 760px; margin: 0 auto; padding: 8px 24px 64px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.row {
+  display: flex; gap: 14px; align-items: center;
+  padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; backdrop-filter: blur(6px);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.row:hover { box-shadow: 0 10px 28px rgba(6, 66, 92, .16); transform: translateY(-1px); }
+.row::after {
+  content: "→"; margin-left: auto; color: var(--muted);
+  font-size: 1.05rem; font-weight: 700;
+}
+.row:hover::after { color: var(--accent); }
+.tile {
+  flex: 0 0 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 1.15rem; font-weight: 800;
+}
+.row-body { min-width: 0; }
+.row-title { margin: 0; font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; }
+.more { color: var(--accent); font-weight: 700; font-size: .9rem; }
+.overflow > summary {
+  cursor: pointer; list-style: none; text-align: center;
+  color: var(--accent); font-weight: 700; font-size: .9rem;
+  padding: 10px; border: 1px dashed var(--border); border-radius: 12px;
+}
+.overflow > summary::-webkit-details-marker { display: none; }
+.overflow[open] > summary { margin-bottom: 12px; }
+.overflow[open] > .row + .row { margin-top: 12px; }
+.article { max-width: 760px; margin: 0 auto; padding: 56px 24px 64px; }
+.article-title {
+  margin: 6px 0 20px; font-size: clamp(1.7rem, 5vw, 2.4rem);
+  font-weight: 800; letter-spacing: -0.02em;
+}
+.back { display: inline-block; margin-top: 32px; }
+.body h2 {
+  margin: 30px 0 8px; font-size: 1.05rem; font-weight: 700;
+  color: var(--accent); letter-spacing: .01em;
+}
+.body h3 { margin: 20px 0 6px; font-size: .95rem; }
+.body p { margin: 8px 0; }
+.body ul { margin: 8px 0; padding-left: 22px; }
+.body li { margin: 6px 0; }
+.body code {
+  background: var(--code-bg); padding: 2px 6px; border-radius: 6px;
+  font-size: .88em; font-family: ui-monospace, Consolas, monospace;
+}
+.empty { text-align: center; color: var(--muted); padding: 48px 0; }
+.foot {
+  max-width: 760px; margin: 0 auto; padding: 0 24px 48px;
+  color: var(--muted); font-size: .85rem; text-align: center;
+}
+/* 카드 클릭 순간: 카드에서 물결이 번진다 */
+.row.splashing {
+  transform: scale(.985);
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 10px 28px rgba(6, 66, 92, .2);
+}
+.row.splashing::before {
+  content: ""; position: absolute; inset: 0; border-radius: 12px;
+  border: 2px solid var(--accent); opacity: .8;
+  animation: ripple .6s ease-out forwards;
+}
+.row { position: relative; }
+@keyframes ripple {
+  to { transform: scale(1.06); opacity: 0; }
+}
+
+/* 화면을 통과하는 물덩이 — 이동은 transform 하나로만(레이아웃 없음) 해서 매끄럽다 */
+.splash {
+  position: fixed; inset: 0; z-index: 50; pointer-events: none;
+  visibility: hidden; overflow: hidden; color: var(--splash);
+}
+.splash.active, :root[data-wave] .splash { visibility: visible; }
+.splash-water {
+  position: absolute; left: 0; width: 100%; height: 100%;
+  background: var(--splash); transform: translateY(100%);
+  will-change: transform;
+}
+:root[data-wave] .splash-water { transform: translateY(0); }  /* 도착 시 이미 덮인 상태 */
+.crest { position: absolute; left: 0; width: 100%; height: 46px; display: block; }
+.crest-top { top: -45px; }
+.crest-bottom { bottom: -45px; transform: scaleY(-1); }
+
+/* 떠날 때: 물이 들어와 화면을 덮는다 */
+.splash.cover-up .splash-water { animation: to-cover .52s cubic-bezier(.45, .05, .55, 1) forwards; }
+.splash.cover-down .splash-water {
+  animation: to-cover .52s cubic-bezier(.45, .05, .55, 1) forwards; --from: -100%;
+}
+@keyframes to-cover { from { transform: translateY(var(--from, 100%)); } to { transform: translateY(0); } }
+
+/* 도착할 때: 같은 방향으로 계속 흘러 화면을 빠져나간다 */
+.splash.exit-up .splash-water { animation: from-cover .6s cubic-bezier(.32, 0, .3, 1) forwards; --to: -100%; }
+.splash.exit-down .splash-water { animation: from-cover .6s cubic-bezier(.32, 0, .3, 1) forwards; }
+@keyframes from-cover { from { transform: translateY(0); } to { transform: translateY(var(--to, 100%)); } }
+
+/* 물 없이 바로 열었을 때만 본문이 떠오른다 (전환으로 왔으면 물이 걷히며 이미 드러난다) */
+:root:not([data-wave]) .arrive { animation: surface .5s cubic-bezier(.2, .7, .3, 1) both; }
+@keyframes surface {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash { display: none; }
+  .row.splashing::before { animation: none; }
+  :root:not([data-wave]) .arrive { animation: none; }
+}
+@media (max-width: 560px) {
+  .row-detail { padding-left: 18px; }
+  .hero { padding-top: 56px; }
+}
+
+</style>
+<script>try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var d=sessionStorage.getItem('wave-dir');if(d){document.documentElement.setAttribute('data-wave',d);}sessionStorage.removeItem('wave-dir');}}catch(e){}</script>
+</head>
+<body>
+<div class="arrive"><nav class="nav"><div class="nav-inner"><a class="brand" href="index.html">K!M0&#x27;s Page</a><div class="links"><a href="index.html">← 목록</a></div></div></nav><main class="article"><h1 class="article-title">어업 데이터·직거래 플랫폼 (fish-data-platform)</h1><div class="body"><h2>상황 (Situation)</h2><p>소규모 어업인은 최대 6단계에 이르는 유통구조를 거치며 유통비용률이 늘고 생산자 수취율은 줄어드는 추세였다. 어업인이 직접 상품을 등록하고 소비자가 바로 주문할 수 있는 직거래 채널이 없어 이 문제가 방치되고 있었다.</p><h2>과제 (Task)</h2><p>소규모 어업인이 상품(어종·수량·가격)을 직접 등록하고(F-01), 소비자가 그 상품을 주문·결제할 수 있는(F-02) 직거래 플랫폼의 MVP를 만드는 것이 과제였다. 결제·배송은 자체 구축하지 않고 외부 PG· 택배사 연동으로 해결하며, 디지털 사용에 익숙하지 않은 고령 어업인도 쓸 수 있도록 UI를 단순화하는 것이 제약이었다.</p><h2>행동 (Action)</h2><ul><li>Next.js(App Router) + Supabase(Postgres·Auth·RLS)로 아키텍처를 잡고, 인증·데이터는 Supabase에 맡기고 UI·서버 액션은 Next.js가 담당하도록 역할을 나눴다.</li><li>회원가입·로그인과 역할(어업인/소비자)에 따라 다른 화면을 보여주는 헤더를 구현했다.</li><li>어업인이 상품(어종·수량·가격)을 등록하는 기능(F-01)과, 소비자가 공개 상품 목록·상세를 보고 주문을 생성하는 기능(F-02의 주문 생성 부분)을 구현했다.</li><li><strong>주문 총액은 클라이언트를 신뢰하지 않고 서버 액션이 DB의 가격으로 항상 다시 계산하도록</strong> 설계· 구현했다 — 클라이언트가 보낸 금액을 그대로 쓰지 않는 원칙을 지켰다.</li><li>zod로 입력 검증 스키마를 만들고, <code>order.ts</code>(주문 총액 계산)와 <code>validation.ts</code>(입력 검증)는 Vitest 단위 테스트를 함께 갖춰 구현했다.</li><li>DB 스키마·RLS는 <code>supabase/migrations/0001_init.sql</code> 하나로 관리했고, 세션 갱신은 미들웨어로 처리했다.</li></ul><h2>결과 (Result)</h2><p>커밋 8개로 스캐폴딩부터 상품 등록(F-01), 상품 목록·상세, 서버 사이드 금액 계산이 들어간 주문 생성까지 구현했다. <strong>결제(토스페이먼츠) 연동, 주문 내역·배송(운송장 입력) 화면, 실제 배포는 계획 단계에만 있고 아직 구현하지 않았다</strong> — 즉 F-02(주문·결제)는 주문 생성까지 완료됐고 결제 승인 단계는 남아 있다.</p><h2>기술스택</h2><p>Next.js 16(App Router) · React 19 · TypeScript · Tailwind CSS 4 · Supabase(<code>@supabase/ssr</code>, <code>@supabase/supabase-js</code>, Postgres + Auth + RLS) · zod · Vitest · ESLint</p><h2>정량 성과</h2><p>정량 성과 미확인. (배포·실사용 전 개발 단계의 프로젝트로, 사용자 수·거래액 등 운영 지표가 없다. PRD에 있는 &quot;입점 어업인 10명·월 거래액 500만원&quot;은 3개월 후 목표 수치이며 달성치가 아니므로 여기에 쓰지 않았다.)</p><h2>회고·배운점</h2><p>Supabase 연동과 서버 사이드 금액 검증을 구현하면서 배운 게 많았다.</p></div><a class="more back" href="index.html">← 목록으로 돌아가기</a></main><footer class="foot">© 2026 K!M0&#x27;s Page</footer></div><div class="splash" aria-hidden="true"><div class="splash-water"><svg class="crest crest-top" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg><svg class="crest crest-bottom" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg></div></div>
+<script>
+(function () {
+  var root = document.documentElement;
+  var splash = document.querySelector('.splash');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!splash) return;
+
+  // 도착: 덮고 있던 물이 오던 방향 그대로 계속 흘러 화면을 빠져나간다
+  var arrived = root.getAttribute('data-wave');
+  if (arrived && !reduce) {
+    splash.classList.add('active', 'exit-' + arrived);
+    setTimeout(function () {
+      splash.className = 'splash';
+      root.removeAttribute('data-wave');
+    }, 700);
+  }
+
+  function leave(link, dir, before) {
+    link.addEventListener('click', function (ev) {
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button !== 0) return;
+      var href = link.getAttribute('href');
+      if (!href || reduce) return;
+      ev.preventDefault();
+      if (before) before();
+      try { sessionStorage.setItem('wave-dir', dir); } catch (e) {}
+      splash.className = 'splash active cover-' + dir;
+      setTimeout(function () { location.href = href; }, 500);
+    });
+  }
+  // 목록 → 상세: 물이 아래에서 차오른다. 상세 → 목록: 위에서 쓸려 내려온다.
+  document.querySelectorAll('a.row').forEach(function (card) {
+    leave(card, 'up', function () { card.classList.add('splashing'); });
+  });
+  document.querySelectorAll('a[href="index.html"]').forEach(function (link) {
+    leave(link, 'down', null);
+  });
+
+  // 뒤로가기(bfcache)로 돌아오면 덮여 있던 물을 걷어낸다
+  window.addEventListener('pageshow', function (ev) {
+    if (ev.persisted) { splash.className = 'splash'; root.removeAttribute('data-wave'); }
+  });
+})();
+
+</script>
+</body>
+</html>

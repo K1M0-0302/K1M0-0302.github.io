@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기획 문서 에이전트 (pm-agent) — K!M0&#x27;s Page</title>
+<style>
+:root {
+  --bg: #f2fbfe;
+  --bg-grad: linear-gradient(180deg, #f9fdfe 0%, #e9f7fc 40%, #d8f0f9 75%, #c8e9f6 100%);
+  --nav-bg: rgba(249, 253, 254, .8);
+  --surface: rgba(255, 255, 255, .88); --border: #d5eaf3;
+  --text: #123648; --muted: #567c8e; --accent: #009fd6;
+  --accent-soft: rgba(0, 159, 214, .12); --code-bg: #e9f5fa;
+  --splash: #4aa8cc;  /* 배경 물빛을 깊게 내린 전환용 바다색 */
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a2231;
+    --bg-grad: linear-gradient(180deg, #0a2231 0%, #103349 45%, #154059 100%);
+    --nav-bg: rgba(10, 34, 49, .8);
+    --surface: rgba(20, 47, 66, .82); --border: #275673;
+    --text: #e6f4fa; --muted: #9dbecd; --accent: #45cdf2;
+    --accent-soft: rgba(69, 205, 242, .16); --code-bg: #163a52;
+    --splash: #0c2d40;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg) var(--bg-grad) no-repeat fixed;
+  color: var(--text);
+  font-family: -apple-system, "Helvetica Neue", "Segoe UI",
+    "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  line-height: 1.7; -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--nav-bg);
+  backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 760px; margin: 0 auto; padding: 14px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.brand { font-weight: 800; letter-spacing: -0.01em; }
+.links { display: flex; gap: 18px; }
+.links a { color: var(--muted); font-size: .95rem; font-weight: 600; }
+.links a:hover { color: var(--accent); }
+.hero { max-width: 760px; margin: 0 auto; padding: 80px 24px 32px; }
+.eyebrow {
+  margin: 0 0 10px; color: var(--accent); font-size: .8rem;
+  font-weight: 700; letter-spacing: .18em;
+}
+.hero h1 {
+  margin: 0; font-size: clamp(2.2rem, 6vw, 3.4rem);
+  font-weight: 800; letter-spacing: -0.02em;
+}
+.hero .tagline { margin: 12px 0 0; font-size: 1.15rem; color: var(--muted); }
+.wave {
+  position: relative; height: 44px; overflow: hidden;
+  color: var(--accent-soft); margin: -8px 0 4px;
+}
+.wave svg {
+  position: absolute; bottom: 0; left: 0;
+  width: 200%; height: 44px; display: block;
+}
+.wave .w1 { animation: drift 11s linear infinite; }
+.wave .w2 { animation: drift 7s linear infinite reverse; opacity: .55; }
+@keyframes drift { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .wave svg { animation: none; } }
+.group { display: flex; flex-direction: column; gap: 12px; scroll-margin-top: 72px; }
+.group + .group { margin-top: 24px; }
+.section-label {
+  margin: 0 0 4px; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.01em;
+}
+.section-label span { color: var(--muted); font-weight: 500; font-size: .9rem; margin-left: 6px; }
+.feed {
+  max-width: 760px; margin: 0 auto; padding: 8px 24px 64px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.row {
+  display: flex; gap: 14px; align-items: center;
+  padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; backdrop-filter: blur(6px);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.row:hover { box-shadow: 0 10px 28px rgba(6, 66, 92, .16); transform: translateY(-1px); }
+.row::after {
+  content: "→"; margin-left: auto; color: var(--muted);
+  font-size: 1.05rem; font-weight: 700;
+}
+.row:hover::after { color: var(--accent); }
+.tile {
+  flex: 0 0 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 1.15rem; font-weight: 800;
+}
+.row-body { min-width: 0; }
+.row-title { margin: 0; font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; }
+.more { color: var(--accent); font-weight: 700; font-size: .9rem; }
+.overflow > summary {
+  cursor: pointer; list-style: none; text-align: center;
+  color: var(--accent); font-weight: 700; font-size: .9rem;
+  padding: 10px; border: 1px dashed var(--border); border-radius: 12px;
+}
+.overflow > summary::-webkit-details-marker { display: none; }
+.overflow[open] > summary { margin-bottom: 12px; }
+.overflow[open] > .row + .row { margin-top: 12px; }
+.article { max-width: 760px; margin: 0 auto; padding: 56px 24px 64px; }
+.article-title {
+  margin: 6px 0 20px; font-size: clamp(1.7rem, 5vw, 2.4rem);
+  font-weight: 800; letter-spacing: -0.02em;
+}
+.back { display: inline-block; margin-top: 32px; }
+.body h2 {
+  margin: 30px 0 8px; font-size: 1.05rem; font-weight: 700;
+  color: var(--accent); letter-spacing: .01em;
+}
+.body h3 { margin: 20px 0 6px; font-size: .95rem; }
+.body p { margin: 8px 0; }
+.body ul { margin: 8px 0; padding-left: 22px; }
+.body li { margin: 6px 0; }
+.body code {
+  background: var(--code-bg); padding: 2px 6px; border-radius: 6px;
+  font-size: .88em; font-family: ui-monospace, Consolas, monospace;
+}
+.empty { text-align: center; color: var(--muted); padding: 48px 0; }
+.foot {
+  max-width: 760px; margin: 0 auto; padding: 0 24px 48px;
+  color: var(--muted); font-size: .85rem; text-align: center;
+}
+/* 카드 클릭 순간: 카드에서 물결이 번진다 */
+.row.splashing {
+  transform: scale(.985);
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 10px 28px rgba(6, 66, 92, .2);
+}
+.row.splashing::before {
+  content: ""; position: absolute; inset: 0; border-radius: 12px;
+  border: 2px solid var(--accent); opacity: .8;
+  animation: ripple .6s ease-out forwards;
+}
+.row { position: relative; }
+@keyframes ripple {
+  to { transform: scale(1.06); opacity: 0; }
+}
+
+/* 화면을 통과하는 물덩이 — 이동은 transform 하나로만(레이아웃 없음) 해서 매끄럽다 */
+.splash {
+  position: fixed; inset: 0; z-index: 50; pointer-events: none;
+  visibility: hidden; overflow: hidden; color: var(--splash);
+}
+.splash.active, :root[data-wave] .splash { visibility: visible; }
+.splash-water {
+  position: absolute; left: 0; width: 100%; height: 100%;
+  background: var(--splash); transform: translateY(100%);
+  will-change: transform;
+}
+:root[data-wave] .splash-water { transform: translateY(0); }  /* 도착 시 이미 덮인 상태 */
+.crest { position: absolute; left: 0; width: 100%; height: 46px; display: block; }
+.crest-top { top: -45px; }
+.crest-bottom { bottom: -45px; transform: scaleY(-1); }
+
+/* 떠날 때: 물이 들어와 화면을 덮는다 */
+.splash.cover-up .splash-water { animation: to-cover .52s cubic-bezier(.45, .05, .55, 1) forwards; }
+.splash.cover-down .splash-water {
+  animation: to-cover .52s cubic-bezier(.45, .05, .55, 1) forwards; --from: -100%;
+}
+@keyframes to-cover { from { transform: translateY(var(--from, 100%)); } to { transform: translateY(0); } }
+
+/* 도착할 때: 같은 방향으로 계속 흘러 화면을 빠져나간다 */
+.splash.exit-up .splash-water { animation: from-cover .6s cubic-bezier(.32, 0, .3, 1) forwards; --to: -100%; }
+.splash.exit-down .splash-water { animation: from-cover .6s cubic-bezier(.32, 0, .3, 1) forwards; }
+@keyframes from-cover { from { transform: translateY(0); } to { transform: translateY(var(--to, 100%)); } }
+
+/* 물 없이 바로 열었을 때만 본문이 떠오른다 (전환으로 왔으면 물이 걷히며 이미 드러난다) */
+:root:not([data-wave]) .arrive { animation: surface .5s cubic-bezier(.2, .7, .3, 1) both; }
+@keyframes surface {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash { display: none; }
+  .row.splashing::before { animation: none; }
+  :root:not([data-wave]) .arrive { animation: none; }
+}
+@media (max-width: 560px) {
+  .row-detail { padding-left: 18px; }
+  .hero { padding-top: 56px; }
+}
+
+</style>
+<script>try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var d=sessionStorage.getItem('wave-dir');if(d){document.documentElement.setAttribute('data-wave',d);}sessionStorage.removeItem('wave-dir');}}catch(e){}</script>
+</head>
+<body>
+<div class="arrive"><nav class="nav"><div class="nav-inner"><a class="brand" href="index.html">K!M0&#x27;s Page</a><div class="links"><a href="index.html">← 목록</a></div></div></nav><main class="article"><h1 class="article-title">기획 문서 에이전트 (pm-agent)</h1><div class="body"><h2>개요</h2><p>프로젝트 하나를 받아 사용자를 인터뷰하고 리서치 보고서·코드를 읽어, 표준 8절 PRD(요구사항 문서)와 표지+15절 PROPOSAL(기획서)을 쓰는 폴더형 에이전트. 모든 사실 주장에 출처 표기를 강제하고, 결함을 심은 문서로 검증한 리뷰어 서브에이전트의 PASS가 완료 조건이다.</p><h2>배경과 문제의식</h2><p>기획 문서는 &quot;그럴듯하게 쓰는 것&quot;이 가장 쉽고 가장 위험하다. 근거 없는 시장 수치, 인터뷰에서 나오지 않은 요구사항이 문서에 스며든다. 이 에이전트는 출처 없는 문장을 리뷰어가 기계적으로 잡아내는 구조로 그 문제를 막는다. 기획서 템플릿 자체도 PMBOK 8판·ISO 21502·Green Book 2026을 종합한 리서치 보고서를 근거로 설계됐다.</p><h2>구조와 개념</h2><ul><li><strong>두 문서의 공존</strong>: 기획서(PROPOSAL) = 왜 하는가/승인, PRD = 무엇을 만드는가/요구사항. 같은 <code>pm\</code> 폴더에 나란히 산다. 기획서에는 BAU(현행 유지) 대안, 운영비, 위험별 책임자가 강제 요소다.</li><li><strong>인터뷰 규율</strong>: AskUserQuestion으로 한 번에 질문 하나, 선택지 제공. 입력 자료에서 답이 나오는 항목은 건너뛰고 확인 한 번으로 대체한다.</li><li><strong>출처 강제</strong>: 웹 출처는 원어 제목·URL·접근일, 리서치 보고서는 경로, 인터뷰는 <code>(사용자 인터뷰)</code> 문단 단위 표기. 리뷰어(pm-reviewer·proposal-reviewer)는 고치지 않고 문제 목록만 반환하며, 루프는 최대 2회 — 그 뒤 잔여 항목은 사용자에게 보여주고 멈춘다.</li><li><strong>자동 체인</strong>: PROPOSAL.md 저장이 감지되면 PostToolUse hook이 Orca CLI로 같은 세션에 <code>/pm-prd</code> 후속 프롬프트를 자동 큐잉한다 — 기획서가 끝나면 PRD 작성으로 자연스럽게 이어진다.</li><li><strong>산문 다듬기의 외부 위임</strong>: 언어적으로 어려운 절은 <code>codex exec</code> 비대화 호출로 위임할 수 있다. 출처 표기·헤딩은 불변 제약이고, 실패하면 건너뛰고 직접 다듬는다.</li></ul><h2>개발 과정</h2><ul><li>2026-08-22 grilling으로 PRD 쪽 설계를 확정하고, 2026-08-25 brainstorming으로 기획서 쪽을 확정했다(리서치 보고서가 템플릿 설계의 근거 문서로 남아 있다).</li><li><strong>리뷰어를 리뷰어답게 검증했다</strong>: 결함 9개를 일부러 심은 PRD를 만들어 pm-reviewer에 넣었더니 심은 결함 전부에 더해 미사용 출처 2건을 추가로 적발했다(FAIL 13건). 기획서 리뷰어도 결함 10개를 심어 전부 적발됨을 확인했다. 검증 장치는 이렇게 실패 사례로 검증해야 신뢰할 수 있다.</li><li>실운행: <code>/pm-prd</code> 1회(2026-08-22), <code>/pm-proposal</code> 1회(2026-08-26) — 둘 다 임시 프로젝트 대상, 리뷰 1회차 PASS.</li><li><strong>Codex 위임에서 인코딩 함정을 또 만났다</strong>(2026-08-26): stdin 파이프로 텍스트를 넘기면 PowerShell 5.1이 CP949로 넘겨 mojibake가 되고, Codex가 깨진 내용을 추측하다 명사를 바꿔 의미를 훼손했다(실측). 파일 경로 방식으로만 위임하도록 확정했다.</li><li>proposal→prd 자동 체인은 일회용 Orca 터미널을 만들어 실제 전송→수신 확인→폐기까지 파이프 테스트로 검증했다.</li></ul><h2>현재 상태</h2><ul><li>검증됨: 가드 자가 테스트 15검사 통과, 템플릿 자리 채우기 검사(PRD 30개·기획서 전체 자리표시자), 리뷰어 2종의 심은 결함 적발, 실운행 각 1회, Codex 위임 스모크 테스트.</li><li>미검증: 산문 다듬기 패스를 포함한 전체 워크플로 무인 검증(인터뷰가 무인 불가), 세션 중 추가한 hook의 실차단 재확인(형제 research-agent에서 원인이 인코딩으로 규명된 뒤 새 세션 확인 대기), proposal→prd 자동 체인의 실제 세션 내 발동(파이프 테스트만 통과).</li></ul><h2>기술스택·도구</h2><p>Claude Code(스킬 2종·리뷰어 서브에이전트 2종·PreToolUse/PostToolUse hook) · PowerShell 5.1 · Node 22(proposal→prd 체인 스크립트) · Orca CLI(세션 간 프롬프트 큐잉) · Codex CLI(산문 다듬기 위임)</p><h2>배운 점</h2><ul><li>리뷰어는 정상 문서 통과만으로는 검증이 안 된다 — 결함을 심은 문서를 전부 잡아내는지 봐야 한다.</li><li>도구 간 텍스트 전달에서 인코딩은 반복적으로 사고 지점이다. stdin 파이프 대신 파일 경로 전달이 Windows 한글 환경의 안전한 기본값이다.</li></ul></div><a class="more back" href="index.html">← 목록으로 돌아가기</a></main><footer class="foot">© 2026 K!M0&#x27;s Page</footer></div><div class="splash" aria-hidden="true"><div class="splash-water"><svg class="crest crest-top" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg><svg class="crest crest-bottom" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg></div></div>
+<script>
+(function () {
+  var root = document.documentElement;
+  var splash = document.querySelector('.splash');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!splash) return;
+
+  // 도착: 덮고 있던 물이 오던 방향 그대로 계속 흘러 화면을 빠져나간다
+  var arrived = root.getAttribute('data-wave');
+  if (arrived && !reduce) {
+    splash.classList.add('active', 'exit-' + arrived);
+    setTimeout(function () {
+      splash.className = 'splash';
+      root.removeAttribute('data-wave');
+    }, 700);
+  }
+
+  function leave(link, dir, before) {
+    link.addEventListener('click', function (ev) {
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button !== 0) return;
+      var href = link.getAttribute('href');
+      if (!href || reduce) return;
+      ev.preventDefault();
+      if (before) before();
+      try { sessionStorage.setItem('wave-dir', dir); } catch (e) {}
+      splash.className = 'splash active cover-' + dir;
+      setTimeout(function () { location.href = href; }, 500);
+    });
+  }
+  // 목록 → 상세: 물이 아래에서 차오른다. 상세 → 목록: 위에서 쓸려 내려온다.
+  document.querySelectorAll('a.row').forEach(function (card) {
+    leave(card, 'up', function () { card.classList.add('splashing'); });
+  });
+  document.querySelectorAll('a[href="index.html"]').forEach(function (link) {
+    leave(link, 'down', null);
+  });
+
+  // 뒤로가기(bfcache)로 돌아오면 덮여 있던 물을 걷어낸다
+  window.addEventListener('pageshow', function (ev) {
+    if (ev.persisted) { splash.className = 'splash'; root.removeAttribute('data-wave'); }
+  });
+})();
+
+</script>
+</body>
+</html>
