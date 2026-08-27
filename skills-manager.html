@@ -9,24 +9,28 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Gowun+Dodum&family=Nunito:wght@400;600;700;800&display=swap">
 <style>
 :root {
-  --bg: #cbe6f2;
-  --bg-grad: linear-gradient(180deg, #d8edf6 0%, #c9e5f1 42%, #b4d9ec 78%, #a2cee7 100%);
-  --nav-bg: rgba(216, 237, 246, .9);
-  /* 카드는 순백이 아니라 옅은 물빛 — 박스가 화면을 덮는 상세 페이지가 목록보다 밝아 보이지 않게 한다 */
-  --surface: rgba(242, 250, 254, .9); --border: #8fc2da;
-  --text: #0f3143; --muted: #476b7e; --accent: #0089b8;
-  --accent-soft: rgba(0, 137, 184, .14); --code-bg: #d6ebf5;
-  --splash: #3d99bd;  /* 배경 물빛을 한 단계 내린 전환용 바다색 */
+  --bg: #a6d3e9;
+  --bg-grad: linear-gradient(180deg, #b7dcee 0%, #a6d3e9 42%, #8fc6e1 78%, #7ab9da 100%);
+  --nav-bg: rgba(183, 220, 238, .9);
+  /* 카드는 「반투명 흰 베일」이다 — 배경 위에 늘 같은 비율로 얹히므로, 카드가 화면을 덮는
+     상세 페이지와 배경이 많이 보이는 목록 페이지의 밝기가 구조적으로 같아진다. */
+  --surface: rgba(255, 255, 255, .52); --border: #7fb6d2;
+  --text: #0c2836; --muted: #3d6072; --accent: #006080;
+  /* 배경 위에 직접 놓이는 작은 액센트 글자용 — 카드 없이도 대비 4.5:1 을 넘긴다 */
+  --accent-strong: #004a62;
+  --accent-soft: rgba(0, 96, 128, .15); --code-bg: rgba(255, 255, 255, .38);
+  --splash: #2e83a6;  /* 배경 물빛을 한 단계 내린 전환용 바다색 */
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #08202f;
-    --bg-grad: linear-gradient(180deg, #08202f 0%, #0f3145 45%, #133f59 100%);
-    --nav-bg: rgba(8, 32, 47, .86);
-    --surface: rgba(19, 50, 70, .9); --border: #35708f;
-    --text: #e7f3f9; --muted: #a3c3d3; --accent: #52c8e8;
-    --accent-soft: rgba(82, 200, 232, .18); --code-bg: #1a4159;
-    --splash: #10334a;
+    --bg: #041521;
+    --bg-grad: linear-gradient(180deg, #041521 0%, #0a2233 45%, #0d2d42 100%);
+    --nav-bg: rgba(4, 21, 33, .88);
+    --surface: rgba(255, 255, 255, .07); --border: #2a5a75;
+    --text: #e3f0f7; --muted: #97b9c9; --accent: #43bcdd;
+    --accent-strong: #7fd8f2;
+    --accent-soft: rgba(67, 188, 221, .18); --code-bg: rgba(255, 255, 255, .06);
+    --splash: #0a2536;
   }
 }
 * { box-sizing: border-box; }
@@ -59,7 +63,7 @@ a { color: inherit; text-decoration: none; }
 .links a:hover { color: var(--accent); }
 .hero { max-width: 760px; margin: 0 auto; padding: 80px 24px 32px; }
 .eyebrow {
-  margin: 0 0 10px; color: var(--accent); font-size: .8rem;
+  margin: 0 0 10px; color: var(--accent-strong); font-size: .8rem;
   font-weight: 700; letter-spacing: .18em;
 }
 .hero h1 {
@@ -114,7 +118,7 @@ a { color: inherit; text-decoration: none; }
 }
 .row-body { min-width: 0; }
 .row-title { margin: 0; font-size: 1.3rem; font-weight: 700; letter-spacing: 0; }
-.more { color: var(--accent); font-weight: 700; font-size: .9rem; }
+.more { color: var(--accent-strong); font-weight: 700; font-size: .9rem; }
 .overflow > summary {
   cursor: pointer; list-style: none; text-align: center;
   color: var(--accent); font-weight: 700; font-size: .9rem;
