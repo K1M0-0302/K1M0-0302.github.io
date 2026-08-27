@@ -352,36 +352,63 @@ a { color: inherit; text-decoration: none; }
   to { transform: scale(1.06); opacity: 0; }
 }
 
-/* 화면을 통과하는 물덩이 — 이동은 transform 하나로만(레이아웃 없음) 해서 매끄럽다 */
+/* 페이지 전환 = 파도가 모래사장에 밀려왔다 물러나는 한 번의 왕복.
+   물은 늘 아래(바다 쪽)에서 올라와 덮고, 새 페이지 위에서 왔던 쪽으로 다시 빠진다.
+   이동은 transform 하나로만(레이아웃 없음) 해서 매끄럽다. */
 .splash {
   position: fixed; inset: 0; z-index: 50; pointer-events: none;
   visibility: hidden; overflow: hidden; color: var(--splash);
 }
-.splash.active, :root[data-wave] .splash { visibility: visible; }
+.splash.active, :root[data-tide="cover"] .splash { visibility: visible; }
 .splash-water {
   position: absolute; left: 0; width: 100%; height: 100%;
   background: var(--splash); transform: translateY(100%);
   will-change: transform;
 }
-:root[data-wave] .splash-water { transform: translateY(0); }  /* 도착 시 이미 덮인 상태 */
+:root[data-tide="cover"] .splash-water { transform: translateY(0); }  /* 도착 시 이미 덮인 상태 */
 .crest { position: absolute; left: 0; width: 100%; height: 46px; display: block; }
 .crest-top { top: -45px; }
-.crest-bottom { bottom: -45px; transform: scaleY(-1); }
-
-/* 떠날 때: 물이 들어와 화면을 덮는다 */
-.splash.cover-up .splash-water { animation: to-cover .52s cubic-bezier(.45, .05, .55, 1) forwards; }
-.splash.cover-down .splash-water {
-  animation: to-cover .52s cubic-bezier(.45, .05, .55, 1) forwards; --from: -100%;
+/* 포말선은 물마루보다 한 뼘 앞서 달린다 — 파도가 밀려오는 방향을 이 선이 알려준다 */
+.crest-foam {
+  top: -58px; color: var(--foam); opacity: .5;
+  filter: blur(.3px);
 }
-@keyframes to-cover { from { transform: translateY(var(--from, 100%)); } to { transform: translateY(0); } }
 
-/* 도착할 때: 같은 방향으로 계속 흘러 화면을 빠져나간다 */
-.splash.exit-up .splash-water { animation: from-cover .6s cubic-bezier(.32, 0, .3, 1) forwards; --to: -100%; }
-.splash.exit-down .splash-water { animation: from-cover .6s cubic-bezier(.32, 0, .3, 1) forwards; }
-@keyframes from-cover { from { transform: translateY(0); } to { transform: translateY(var(--to, 100%)); } }
+/* 밀물: 빠르게 밀려와 모래 위에서 힘이 빠지며 멈춘다(감속). 끝에서 살짝 더 밀고 들어간다. */
+.splash.washing-in .splash-water {
+  animation: tide-in .62s cubic-bezier(.22, .68, .36, 1) forwards;
+}
+@keyframes tide-in {
+  from { transform: translateY(100%); }
+  74%  { transform: translateY(5%); }
+  to   { transform: translateY(0); }
+}
+/* 썰물: 잠깐 머뭇하다 풀려서 점점 빨라지며 바다로 끌려 내려간다(가속).
+   너무 뒤에 몰린 곡선을 쓰면 화면이 덮인 채 멎어 보인다 — 60% 지점에 절반쯤은 빠져야 한다. */
+.splash.washing-out .splash-water {
+  animation: tide-out .8s cubic-bezier(.42, .06, .62, .72) forwards;
+  animation-delay: .12s;
+}
+@keyframes tide-out {
+  from { transform: translateY(0); }
+  10%  { transform: translateY(2%); }
+  to   { transform: translateY(100%); }
+}
+/* 물이 빠진 자리에 남는 젖은 모래 자국 — 아래쪽일수록 오래 젖어 있다 */
+.wet-sand {
+  position: absolute; inset: 0; opacity: 0;
+  background: linear-gradient(180deg,
+    rgba(116, 196, 230, 0) 0%, rgba(116, 196, 230, .07) 55%, rgba(116, 196, 230, .16) 100%);
+}
+.splash.washing-out .wet-sand { animation: wet-fade .92s ease-out forwards; }
+@keyframes wet-fade {
+  0%   { opacity: 1; }
+  55%  { opacity: .5; }
+  100% { opacity: 0; }
+}
 
 /* 물 없이 바로 열었을 때만 본문이 떠오른다 (전환으로 왔으면 물이 걷히며 이미 드러난다) */
-:root:not([data-wave]) .arrive { animation: surface .5s cubic-bezier(.2, .7, .3, 1) both; }
+:root:not([data-tide]) .arrive { animation: surface .5s cubic-bezier(.2, .7, .3, 1) both; }
 @keyframes surface {
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: none; }
@@ -390,7 +417,7 @@ a { color: inherit; text-decoration: none; }
 @media (prefers-reduced-motion: reduce) {
   .splash { display: none; }
   .row.splashing::before { animation: none; }
-  :root:not([data-wave]) .arrive { animation: none; }
+  :root:not([data-tide]) .arrive { animation: none; }
 }
 @media (max-width: 560px) {
   .row-detail { padding-left: 18px; }
@@ -398,10 +425,10 @@ a { color: inherit; text-decoration: none; }
 }
 
 </style>
-<script>try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var d=sessionStorage.getItem('wave-dir');if(d){document.documentElement.setAttribute('data-wave',d);}sessionStorage.removeItem('wave-dir');}}catch(e){}</script>
+<script>try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){if(sessionStorage.getItem('tide')){document.documentElement.setAttribute('data-tide','cover');}sessionStorage.removeItem('tide');}}catch(e){}</script>
 </head>
 <body>
-<div class="bubbles" aria-hidden="true"><div class="bubble-column left"><i class="bubble" style="left:18%;width:14px;height:14px;animation-duration:17s;animation-delay:0.0s;--o:0.4"></i><i class="bubble" style="left:62%;width:9px;height:9px;animation-duration:21s;animation-delay:3.5s;--o:0.3"></i><i class="bubble" style="left:36%;width:20px;height:20px;animation-duration:25s;animation-delay:7.0s;--o:0.34"></i><i class="bubble" style="left:78%;width:7px;height:7px;animation-duration:15s;animation-delay:11.0s;--o:0.26"></i><i class="bubble" style="left:8%;width:12px;height:12px;animation-duration:23s;animation-delay:14.5s;--o:0.32"></i><i class="bubble" style="left:52%;width:16px;height:16px;animation-duration:19s;animation-delay:18.0s;--o:0.28"></i></div><div class="bubble-column right"><i class="bubble" style="left:18%;width:14px;height:14px;animation-duration:17s;animation-delay:9.5s;--o:0.4"></i><i class="bubble" style="left:62%;width:9px;height:9px;animation-duration:21s;animation-delay:13.0s;--o:0.3"></i><i class="bubble" style="left:36%;width:20px;height:20px;animation-duration:25s;animation-delay:16.5s;--o:0.34"></i><i class="bubble" style="left:78%;width:7px;height:7px;animation-duration:15s;animation-delay:20.5s;--o:0.26"></i><i class="bubble" style="left:8%;width:12px;height:12px;animation-duration:23s;animation-delay:24.0s;--o:0.32"></i><i class="bubble" style="left:52%;width:16px;height:16px;animation-duration:19s;animation-delay:27.5s;--o:0.28"></i></div></div><div class="arrive"><nav class="nav night-nav"><div class="nav-inner"><a class="brand" href="index.html">K!M0&#x27;s Page</a><div class="links"><a href="index.html">← 목록</a></div></div></nav><div class="night"><div class="stars" aria-hidden="true"><i class="star" style="left:32.74%;top:15.16%;width:2.31px;height:2.31px;animation-delay:0.26s;animation-duration:4.09s"></i><i class="star" style="left:36.84%;top:8.29%;width:2.11px;height:2.11px;animation-delay:0.13s;animation-duration:3.84s"></i><i class="star" style="left:7.85%;top:10.71%;width:1.99px;height:1.99px;animation-delay:2.98s;animation-duration:3.1s"></i><i class="star" style="left:22.88%;top:50.43%;width:2.73px;height:2.73px;animation-delay:2.08s;animation-duration:3.75s"></i><i class="star" style="left:96.67%;top:7.45%;width:2.6px;height:2.6px;animation-delay:1.04s;animation-duration:3.15s"></i><i class="star" style="left:12.54%;top:26.83%;width:2.54px;height:2.54px;animation-delay:0.65s;animation-duration:4.2s"></i><i class="star" style="left:63.61%;top:31.56%;width:2.17px;height:2.17px;animation-delay:0.23s;animation-duration:2.94s"></i><i class="star" style="left:21.18%;top:54.35%;width:2.0px;height:2.0px;animation-delay:1.13s;animation-duration:4.21s"></i><i class="star" style="left:45.41%;top:26.18%;width:2.51px;height:2.51px;animation-delay:2.52s;animation-duration:3.39s"></i><i class="star" style="left:57.29%;top:42.86%;width:2.63px;height:2.63px;animation-delay:2.63s;animation-duration:3.49s"></i><i class="star" style="left:97.06%;top:12.74%;width:1.99px;height:1.99px;animation-delay:2.73s;animation-duration:3.16s"></i><i class="star" style="left:48.92%;top:6.9%;width:2.34px;height:2.34px;animation-delay:2.75s;animation-duration:4.18s"></i><i class="star" style="left:86.8%;top:27.22%;width:2.37px;height:2.37px;animation-delay:2.14s;animation-duration:4.19s"></i><i class="star" style="left:45.71%;top:66.16%;width:2.72px;height:2.72px;animation-delay:1.71s;animation-duration:4.39s"></i><i class="star" style="left:6.95%;top:55.91%;width:2.31px;height:2.31px;animation-delay:3.58s;animation-duration:4.77s"></i><i class="star" style="left:28.89%;top:32.55%;width:2.34px;height:2.34px;animation-delay:0.08s;animation-duration:3.91s"></i><i class="star" style="left:17.47%;top:12.67%;width:1.48px;height:1.48px;animation-delay:2.77s;animation-duration:3.11s"></i><i class="star" style="left:25.27%;top:32.93%;width:2.62px;height:2.62px;animation-delay:0.29s;animation-duration:3.88s"></i><i class="star" style="left:54.85%;top:69.37%;width:2.55px;height:2.55px;animation-delay:3.11s;animation-duration:3.47s"></i><i class="star" style="left:41.7%;top:30.55%;width:2.64px;height:2.64px;animation-delay:3.45s;animation-duration:3.16s"></i><i class="star" style="left:18.27%;top:21.16%;width:1.73px;height:1.73px;animation-delay:1.75s;animation-duration:4.21s"></i><i class="star" style="left:26.75%;top:4.3%;width:1.99px;height:1.99px;animation-delay:1.33s;animation-duration:4.16s"></i><i class="star" style="left:94.4%;top:55.1%;width:2.12px;height:2.12px;animation-delay:2.22s;animation-duration:4.42s"></i><i class="star" style="left:6.29%;top:70.57%;width:2.49px;height:2.49px;animation-delay:3.15s;animation-duration:4.71s"></i><i class="star" style="left:39.45%;top:33.52%;width:1.54px;height:1.54px;animation-delay:2.28s;animation-duration:2.95s"></i><i class="star" style="left:7.6%;top:19.45%;width:1.63px;height:1.63px;animation-delay:1.22s;animation-duration:2.93s"></i><i class="star" style="left:1.02%;top:15.19%;width:1.54px;height:1.54px;animation-delay:1.31s;animation-duration:2.86s"></i><i class="star" style="left:86.68%;top:49.44%;width:1.61px;height:1.61px;animation-delay:0.91s;animation-duration:3.63s"></i><i class="star" style="left:36.69%;top:13.09%;width:2.59px;height:2.59px;animation-delay:3.58s;animation-duration:3.92s"></i><i class="star" style="left:48.42%;top:10.36%;width:1.54px;height:1.54px;animation-delay:1.23s;animation-duration:3.44s"></i><i class="star" style="left:82.23%;top:15.95%;width:1.43px;height:1.43px;animation-delay:3.42s;animation-duration:4.07s"></i><i class="star" style="left:15.37%;top:44.19%;width:1.44px;height:1.44px;animation-delay:1.9s;animation-duration:5.15s"></i><i class="star" style="left:85.61%;top:55.52%;width:1.77px;height:1.77px;animation-delay:1.32s;animation-duration:3.2s"></i><i class="star" style="left:76.65%;top:43.41%;width:2.49px;height:2.49px;animation-delay:1.19s;animation-duration:3.34s"></i></div><header class="hero page-head"><h1>스킬 해설 작업대 (skills-manager)</h1></header><div class="seascape"><div class="wave" aria-hidden="true"><svg class="foam" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--foam)"/></svg><svg class="foam foam-2" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--foam)"/></svg><svg class="w1" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--bg)"/></svg><svg class="w2" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--bg)"/></svg></div></div></div><main class="article"><div class="body"><section class="box"><h2>개요</h2><p>설치된 Claude Code 지시문(스킬·서브에이전트·rules·CLAUDE.md)이 실제로 무엇을 하는지 해부해 해설 리포트를 내는 폴더형 에이전트. 설명만 하고 고치지 않는다 — 개정은 별도 도구(skill-tdd)의 몫이라는 역할 분리가 핵심이다.</p></section><section class="box"><h2>배경과 문제의식</h2><p>스킬과 지시문이 수십 개 쌓이면 &quot;이게 정확히 뭘 하는 물건인지&quot;를 아무도 모르게 된다. 더 나쁜 것은 적힌 지시와 실제 집행이 어긋나는 경우다 — 지시문은 텍스트일 뿐이고, 로드되는지·따라지는지는 별개 문제다. 이 에이전트는 「선언 × 집행」 대조를 체계화한다.</p></section><section class="box"><h2>구조와 개념</h2><ul><li><strong>정본 경계가 첫 번째 규칙</strong>: 동작하는 실물은 <code>~/.claude/</code> 아래에 있고 거기가 정본이다. 스킬 파일을 작업대로 복사하지 않는다(사본은 즉시 표류한다). 개정은 제자리에서.</li><li><strong>출처 5종 판정</strong>: 실디렉터리 / 심링크(실물은 <code>~/.agents/</code> — 다른 AI 도구와 공유) / 플러그인 캐시(개정 불가 — 업데이트가 덮는다) / 빌트인(디스크에 없음) / repo 종속. 어느 칸인지 판정하지 않고 고치면 플러그인 캐시를 고쳐놓고 다음 업데이트에 조용히 잃는다.</li><li><strong>작업대와 원장의 분리</strong>: 여기는 해부하는 작업대, 개정 기록은 별도 원장 저장소에만 쌓인다. 두 곳에 적으면 갈라진다.</li><li><strong>관측 오염 방지</strong>: 이 에이전트의 가장 흥미로운 설계 결정 — 집행 관측을 Task 서브에이전트로 돌리지 않는다. 에이전트의 CLAUDE.md가 서브에이전트에 자동 주입되므로(실측), 프로브가 자기 답이 무엇에 쓰이는지 알고 답하게 되고, 지시를 잘 따르는 척하는 쪽으로 기울어 재려던 신호가 사라진다. 대신 CLAUDE.md 조상이 없는 임시 폴더에서 <code>claude -p</code> 셸을 돌린다. 같은 이유로 이 repo에는 의도적으로 <code>.claude/agents/</code>가 없다.</li></ul></section><section class="box"><h2>개발 과정</h2><ul><li>2026-08-05 실측에서 플러그인 생태계의 함정을 적립했다: 플러그인 캐시의 <code>.in_use</code> 마커는 활성 표시가 아니었다(두 버전에 동시에 붙어 있었다). 활성 버전의 유일한 근거는 <code>installed_plugins.json</code>의 installPath 하나이며, 캐시에는 SKILL.md가 194개 쌓여 같은 스킬이 버전별로 중복된다.</li><li>진단 기준은 외부 리서치를 그대로 믿지 않고 로컬 원본과 대조해 통과분만 채택했다 — 어긋난 6건은 폐기 이유와 함께 별도 섹션에 남겼다.</li><li>이 작업대에서 이웃 에이전트(pm-agent)의 해설 리포트와 개정 작업을 실제로 수행했다 — 다른 에이전트를 해부·개선하는 메타 도구로 작동한 실적이다.</li></ul></section><section class="box"><h2>현재 상태</h2><ul><li>해설 절차(skill-xray)와 판정 기준은 갖춰졌고 실운행 실적이 있다. 스키마는 아직 스킬 기준이라 서브에이전트·rules 해설은 실제로 돌려보며 갈라지는 부분을 적립하는 중. 빌드도 테스트도 없다 — 검증은 실제로 돌려 리포트를 읽는 것이다.</li></ul></section><section class="box"><h2>기술스택·도구</h2><p>Claude Code(스킬, <code>claude -p</code> 헤드리스 프로브) · 플러그인 시스템 내부 구조(installed_plugins.json, 캐시 레이아웃) · 심링크 기반 다중 도구 공유(<code>~/.agents/</code>)</p></section><section class="box"><h2>배운 점</h2><ul><li>관측 도구가 관측 대상을 오염시킬 수 있다 — 지시문이 자동 주입되는 환경에서는 &quot;깨끗한 방&quot;을 따로 만들어야 진짜 집행을 잰다.</li><li>편리한 길(서브에이전트 등록)을 일부러 막아두는 것도 설계다. 만들어두면 다음 세션이 그 쉬운 길로 간다.</li></ul></section></div><a class="more back" href="index.html">← 목록으로 돌아가기</a></main><footer class="foot">© 2026 K!M0&#x27;s Page</footer></div><div class="splash" aria-hidden="true"><div class="splash-water"><svg class="crest crest-top" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg><svg class="crest crest-bottom" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg></div></div>
+<div class="bubbles" aria-hidden="true"><div class="bubble-column left"><i class="bubble" style="left:18%;width:14px;height:14px;animation-duration:17s;animation-delay:0.0s;--o:0.4"></i><i class="bubble" style="left:62%;width:9px;height:9px;animation-duration:21s;animation-delay:3.5s;--o:0.3"></i><i class="bubble" style="left:36%;width:20px;height:20px;animation-duration:25s;animation-delay:7.0s;--o:0.34"></i><i class="bubble" style="left:78%;width:7px;height:7px;animation-duration:15s;animation-delay:11.0s;--o:0.26"></i><i class="bubble" style="left:8%;width:12px;height:12px;animation-duration:23s;animation-delay:14.5s;--o:0.32"></i><i class="bubble" style="left:52%;width:16px;height:16px;animation-duration:19s;animation-delay:18.0s;--o:0.28"></i></div><div class="bubble-column right"><i class="bubble" style="left:18%;width:14px;height:14px;animation-duration:17s;animation-delay:9.5s;--o:0.4"></i><i class="bubble" style="left:62%;width:9px;height:9px;animation-duration:21s;animation-delay:13.0s;--o:0.3"></i><i class="bubble" style="left:36%;width:20px;height:20px;animation-duration:25s;animation-delay:16.5s;--o:0.34"></i><i class="bubble" style="left:78%;width:7px;height:7px;animation-duration:15s;animation-delay:20.5s;--o:0.26"></i><i class="bubble" style="left:8%;width:12px;height:12px;animation-duration:23s;animation-delay:24.0s;--o:0.32"></i><i class="bubble" style="left:52%;width:16px;height:16px;animation-duration:19s;animation-delay:27.5s;--o:0.28"></i></div></div><div class="arrive"><nav class="nav night-nav"><div class="nav-inner"><a class="brand" href="index.html">K!M0&#x27;s Page</a><div class="links"><a href="index.html">← 목록</a></div></div></nav><div class="night"><div class="stars" aria-hidden="true"><i class="star" style="left:32.74%;top:15.16%;width:2.31px;height:2.31px;animation-delay:0.26s;animation-duration:4.09s"></i><i class="star" style="left:36.84%;top:8.29%;width:2.11px;height:2.11px;animation-delay:0.13s;animation-duration:3.84s"></i><i class="star" style="left:7.85%;top:10.71%;width:1.99px;height:1.99px;animation-delay:2.98s;animation-duration:3.1s"></i><i class="star" style="left:22.88%;top:50.43%;width:2.73px;height:2.73px;animation-delay:2.08s;animation-duration:3.75s"></i><i class="star" style="left:96.67%;top:7.45%;width:2.6px;height:2.6px;animation-delay:1.04s;animation-duration:3.15s"></i><i class="star" style="left:12.54%;top:26.83%;width:2.54px;height:2.54px;animation-delay:0.65s;animation-duration:4.2s"></i><i class="star" style="left:63.61%;top:31.56%;width:2.17px;height:2.17px;animation-delay:0.23s;animation-duration:2.94s"></i><i class="star" style="left:21.18%;top:54.35%;width:2.0px;height:2.0px;animation-delay:1.13s;animation-duration:4.21s"></i><i class="star" style="left:45.41%;top:26.18%;width:2.51px;height:2.51px;animation-delay:2.52s;animation-duration:3.39s"></i><i class="star" style="left:57.29%;top:42.86%;width:2.63px;height:2.63px;animation-delay:2.63s;animation-duration:3.49s"></i><i class="star" style="left:97.06%;top:12.74%;width:1.99px;height:1.99px;animation-delay:2.73s;animation-duration:3.16s"></i><i class="star" style="left:48.92%;top:6.9%;width:2.34px;height:2.34px;animation-delay:2.75s;animation-duration:4.18s"></i><i class="star" style="left:86.8%;top:27.22%;width:2.37px;height:2.37px;animation-delay:2.14s;animation-duration:4.19s"></i><i class="star" style="left:45.71%;top:66.16%;width:2.72px;height:2.72px;animation-delay:1.71s;animation-duration:4.39s"></i><i class="star" style="left:6.95%;top:55.91%;width:2.31px;height:2.31px;animation-delay:3.58s;animation-duration:4.77s"></i><i class="star" style="left:28.89%;top:32.55%;width:2.34px;height:2.34px;animation-delay:0.08s;animation-duration:3.91s"></i><i class="star" style="left:17.47%;top:12.67%;width:1.48px;height:1.48px;animation-delay:2.77s;animation-duration:3.11s"></i><i class="star" style="left:25.27%;top:32.93%;width:2.62px;height:2.62px;animation-delay:0.29s;animation-duration:3.88s"></i><i class="star" style="left:54.85%;top:69.37%;width:2.55px;height:2.55px;animation-delay:3.11s;animation-duration:3.47s"></i><i class="star" style="left:41.7%;top:30.55%;width:2.64px;height:2.64px;animation-delay:3.45s;animation-duration:3.16s"></i><i class="star" style="left:18.27%;top:21.16%;width:1.73px;height:1.73px;animation-delay:1.75s;animation-duration:4.21s"></i><i class="star" style="left:26.75%;top:4.3%;width:1.99px;height:1.99px;animation-delay:1.33s;animation-duration:4.16s"></i><i class="star" style="left:94.4%;top:55.1%;width:2.12px;height:2.12px;animation-delay:2.22s;animation-duration:4.42s"></i><i class="star" style="left:6.29%;top:70.57%;width:2.49px;height:2.49px;animation-delay:3.15s;animation-duration:4.71s"></i><i class="star" style="left:39.45%;top:33.52%;width:1.54px;height:1.54px;animation-delay:2.28s;animation-duration:2.95s"></i><i class="star" style="left:7.6%;top:19.45%;width:1.63px;height:1.63px;animation-delay:1.22s;animation-duration:2.93s"></i><i class="star" style="left:1.02%;top:15.19%;width:1.54px;height:1.54px;animation-delay:1.31s;animation-duration:2.86s"></i><i class="star" style="left:86.68%;top:49.44%;width:1.61px;height:1.61px;animation-delay:0.91s;animation-duration:3.63s"></i><i class="star" style="left:36.69%;top:13.09%;width:2.59px;height:2.59px;animation-delay:3.58s;animation-duration:3.92s"></i><i class="star" style="left:48.42%;top:10.36%;width:1.54px;height:1.54px;animation-delay:1.23s;animation-duration:3.44s"></i><i class="star" style="left:82.23%;top:15.95%;width:1.43px;height:1.43px;animation-delay:3.42s;animation-duration:4.07s"></i><i class="star" style="left:15.37%;top:44.19%;width:1.44px;height:1.44px;animation-delay:1.9s;animation-duration:5.15s"></i><i class="star" style="left:85.61%;top:55.52%;width:1.77px;height:1.77px;animation-delay:1.32s;animation-duration:3.2s"></i><i class="star" style="left:76.65%;top:43.41%;width:2.49px;height:2.49px;animation-delay:1.19s;animation-duration:3.34s"></i></div><header class="hero page-head"><h1>스킬 해설 작업대 (skills-manager)</h1></header><div class="seascape"><div class="wave" aria-hidden="true"><svg class="foam" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--foam)"/></svg><svg class="foam foam-2" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--foam)"/></svg><svg class="w1" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--bg)"/></svg><svg class="w2" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--bg)"/></svg></div></div></div><main class="article"><div class="body"><section class="box"><h2>개요</h2><p>설치된 Claude Code 지시문(스킬·서브에이전트·rules·CLAUDE.md)이 실제로 무엇을 하는지 해부해 해설 리포트를 내는 폴더형 에이전트. 설명만 하고 고치지 않는다 — 개정은 별도 도구(skill-tdd)의 몫이라는 역할 분리가 핵심이다.</p></section><section class="box"><h2>배경과 문제의식</h2><p>스킬과 지시문이 수십 개 쌓이면 &quot;이게 정확히 뭘 하는 물건인지&quot;를 아무도 모르게 된다. 더 나쁜 것은 적힌 지시와 실제 집행이 어긋나는 경우다 — 지시문은 텍스트일 뿐이고, 로드되는지·따라지는지는 별개 문제다. 이 에이전트는 「선언 × 집행」 대조를 체계화한다.</p></section><section class="box"><h2>구조와 개념</h2><ul><li><strong>정본 경계가 첫 번째 규칙</strong>: 동작하는 실물은 <code>~/.claude/</code> 아래에 있고 거기가 정본이다. 스킬 파일을 작업대로 복사하지 않는다(사본은 즉시 표류한다). 개정은 제자리에서.</li><li><strong>출처 5종 판정</strong>: 실디렉터리 / 심링크(실물은 <code>~/.agents/</code> — 다른 AI 도구와 공유) / 플러그인 캐시(개정 불가 — 업데이트가 덮는다) / 빌트인(디스크에 없음) / repo 종속. 어느 칸인지 판정하지 않고 고치면 플러그인 캐시를 고쳐놓고 다음 업데이트에 조용히 잃는다.</li><li><strong>작업대와 원장의 분리</strong>: 여기는 해부하는 작업대, 개정 기록은 별도 원장 저장소에만 쌓인다. 두 곳에 적으면 갈라진다.</li><li><strong>관측 오염 방지</strong>: 이 에이전트의 가장 흥미로운 설계 결정 — 집행 관측을 Task 서브에이전트로 돌리지 않는다. 에이전트의 CLAUDE.md가 서브에이전트에 자동 주입되므로(실측), 프로브가 자기 답이 무엇에 쓰이는지 알고 답하게 되고, 지시를 잘 따르는 척하는 쪽으로 기울어 재려던 신호가 사라진다. 대신 CLAUDE.md 조상이 없는 임시 폴더에서 <code>claude -p</code> 셸을 돌린다. 같은 이유로 이 repo에는 의도적으로 <code>.claude/agents/</code>가 없다.</li></ul></section><section class="box"><h2>개발 과정</h2><ul><li>2026-08-05 실측에서 플러그인 생태계의 함정을 적립했다: 플러그인 캐시의 <code>.in_use</code> 마커는 활성 표시가 아니었다(두 버전에 동시에 붙어 있었다). 활성 버전의 유일한 근거는 <code>installed_plugins.json</code>의 installPath 하나이며, 캐시에는 SKILL.md가 194개 쌓여 같은 스킬이 버전별로 중복된다.</li><li>진단 기준은 외부 리서치를 그대로 믿지 않고 로컬 원본과 대조해 통과분만 채택했다 — 어긋난 6건은 폐기 이유와 함께 별도 섹션에 남겼다.</li><li>이 작업대에서 이웃 에이전트(pm-agent)의 해설 리포트와 개정 작업을 실제로 수행했다 — 다른 에이전트를 해부·개선하는 메타 도구로 작동한 실적이다.</li></ul></section><section class="box"><h2>현재 상태</h2><ul><li>해설 절차(skill-xray)와 판정 기준은 갖춰졌고 실운행 실적이 있다. 스키마는 아직 스킬 기준이라 서브에이전트·rules 해설은 실제로 돌려보며 갈라지는 부분을 적립하는 중. 빌드도 테스트도 없다 — 검증은 실제로 돌려 리포트를 읽는 것이다.</li></ul></section><section class="box"><h2>기술스택·도구</h2><p>Claude Code(스킬, <code>claude -p</code> 헤드리스 프로브) · 플러그인 시스템 내부 구조(installed_plugins.json, 캐시 레이아웃) · 심링크 기반 다중 도구 공유(<code>~/.agents/</code>)</p></section><section class="box"><h2>배운 점</h2><ul><li>관측 도구가 관측 대상을 오염시킬 수 있다 — 지시문이 자동 주입되는 환경에서는 &quot;깨끗한 방&quot;을 따로 만들어야 진짜 집행을 잰다.</li><li>편리한 길(서브에이전트 등록)을 일부러 막아두는 것도 설계다. 만들어두면 다음 세션이 그 쉬운 길로 간다.</li></ul></section></div><a class="more back" href="index.html">← 목록으로 돌아가기</a></main><footer class="foot">© 2026 K!M0&#x27;s Page</footer></div><div class="splash" aria-hidden="true"><div class="wet-sand"></div><div class="splash-water"><svg class="crest crest-foam" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg><svg class="crest crest-top" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg></div></div>
 <script>
 (function () {
   var root = document.documentElement;
@@ -409,39 +436,31 @@ a { color: inherit; text-decoration: none; }
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!splash) return;
 
-  // 도착: 덮고 있던 물이 오던 방향 그대로 계속 흘러 화면을 빠져나간다
-  var arrived = root.getAttribute('data-wave');
-  if (arrived && !reduce) {
-    splash.classList.add('active', 'exit-' + arrived);
+  // 도착: 덮고 있던 물이 잠깐 머물다 왔던 쪽(아래)으로 빠지며 새 페이지가 드러난다.
+  // 물러나는 시간(.86s) + 머무는 시간(.16s) 이 지나야 덮개를 걷는다.
+  // 표시는 지우지 않고 '끝남'으로 바꾼다 — 지우면 `:root:not([data-tide]) .arrive` 가 그제서야
+  // 들어맞아 본문이 한 번 더 페이드인한다(2026-08-27 실측 버그).
+  if (root.getAttribute('data-tide') === 'cover' && !reduce) {
+    splash.classList.add('active', 'washing-out');
     setTimeout(function () {
       splash.className = 'splash';
-      root.removeAttribute('data-wave');
-    }, 700);
+      root.setAttribute('data-tide', 'done');
+    }, 960);
   }
 
-  function leave(link, dir, before) {
+  // 사이트 안의 링크는 전부 같은 파도를 탄다 — 링크마다 다르게 굴면 산만하다.
+  document.querySelectorAll("a[href$='.html']").forEach(function (link) {
     link.addEventListener('click', function (ev) {
-      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button !== 0) return;
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
       var href = link.getAttribute('href');
       if (!href || reduce) return;
       ev.preventDefault();
-      if (before) before();
-      try { sessionStorage.setItem('wave-dir', dir); } catch (e) {}
-      splash.className = 'splash active cover-' + dir;
-      setTimeout(function () { location.href = href; }, 500);
+      if (link.classList.contains('row')) link.classList.add('splashing');
+      try { sessionStorage.setItem('tide', '1'); } catch (e) {}
+      splash.className = 'splash active washing-in';
+      // 화면이 완전히 덮인 뒤에 넘어간다 — 일찍 넘기면 전환이 새 페이지에서 끊겨 보인다
+      setTimeout(function () { location.href = href; }, 560);
     });
-  }
-  // 안으로 들어갈 때(카드·분류 링크)는 물이 차오르고, 홈으로 나올 때는 쓸려 내려간다.
-  document.querySelectorAll('a.row').forEach(function (card) {
-    leave(card, 'up', function () { card.classList.add('splashing'); });
-  });
-  document.querySelectorAll('.links a').forEach(function (link) {
-    var href = link.getAttribute('href') || '';
-    if (href === 'index.html') return;          // 홈 링크는 아래에서 따로 묶는다
-    leave(link, 'up', null);
-  });
-  document.querySelectorAll('a[href="index.html"]').forEach(function (link) {
-    leave(link, 'down', null);
   });
 
   // 종이배를 누르면 밤하늘에 별똥별이 하나 떨어진다
@@ -462,7 +481,7 @@ a { color: inherit; text-decoration: none; }
 
   // 뒤로가기(bfcache)로 돌아오면 덮여 있던 물을 걷어낸다
   window.addEventListener('pageshow', function (ev) {
-    if (ev.persisted) { splash.className = 'splash'; root.removeAttribute('data-wave'); }
+    if (ev.persisted) { splash.className = 'splash'; root.setAttribute('data-tide', 'done'); }
   });
 })();
 
