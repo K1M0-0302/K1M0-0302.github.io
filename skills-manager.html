@@ -182,6 +182,7 @@ a { color: inherit; text-decoration: none; }
   font-weight: 700; letter-spacing: 0;
 }
 .back { display: inline-block; margin-top: 32px; }
+.title-ko { color: var(--muted); font-size: .55em; font-weight: 500; margin-left: 6px; }
 /* 박스 사이를 목록 카드 간격(12px)보다 넉넉히 벌려 배경 물빛이 그만큼 드러나게 한다 */
 .body { display: flex; flex-direction: column; gap: 20px; }
 .box {
@@ -303,9 +304,14 @@ a { color: inherit; text-decoration: none; }
       setTimeout(function () { location.href = href; }, 500);
     });
   }
-  // 목록 → 상세: 물이 아래에서 차오른다. 상세 → 목록: 위에서 쓸려 내려온다.
+  // 안으로 들어갈 때(카드·분류 링크)는 물이 차오르고, 홈으로 나올 때는 쓸려 내려간다.
   document.querySelectorAll('a.row').forEach(function (card) {
     leave(card, 'up', function () { card.classList.add('splashing'); });
+  });
+  document.querySelectorAll('.links a').forEach(function (link) {
+    var href = link.getAttribute('href') || '';
+    if (href === 'index.html') return;          // 홈 링크는 아래에서 따로 묶는다
+    leave(link, 'up', null);
   });
   document.querySelectorAll('a[href="index.html"]').forEach(function (link) {
     leave(link, 'down', null);
