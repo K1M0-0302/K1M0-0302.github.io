@@ -9,24 +9,24 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Gowun+Dodum&family=Nunito:wght@400;600;700;800&display=swap">
 <style>
 :root {
-  --bg: #dff1f9;
-  --bg-grad: linear-gradient(180deg, #e9f6fb 0%, #dcf0f8 42%, #cbe7f4 78%, #bbddf0 100%);
-  --nav-bg: rgba(233, 246, 251, .88);
+  --bg: #cbe6f2;
+  --bg-grad: linear-gradient(180deg, #d8edf6 0%, #c9e5f1 42%, #b4d9ec 78%, #a2cee7 100%);
+  --nav-bg: rgba(216, 237, 246, .9);
   /* 카드는 순백이 아니라 옅은 물빛 — 박스가 화면을 덮는 상세 페이지가 목록보다 밝아 보이지 않게 한다 */
-  --surface: rgba(250, 253, 255, .9); --border: #a2cfe4;
-  --text: #123648; --muted: #4e7285; --accent: #0095c6;
-  --accent-soft: rgba(0, 149, 198, .13); --code-bg: #dff0f8;
-  --splash: #4aa6ca;  /* 배경 물빛을 한 단계 내린 전환용 바다색 */
+  --surface: rgba(242, 250, 254, .9); --border: #8fc2da;
+  --text: #0f3143; --muted: #476b7e; --accent: #0089b8;
+  --accent-soft: rgba(0, 137, 184, .14); --code-bg: #d6ebf5;
+  --splash: #3d99bd;  /* 배경 물빛을 한 단계 내린 전환용 바다색 */
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b2839;
-    --bg-grad: linear-gradient(180deg, #0b2839 0%, #133a51 45%, #174a66 100%);
-    --nav-bg: rgba(11, 40, 57, .85);
-    --surface: rgba(24, 59, 81, .9); --border: #3d7fa1;
-    --text: #ecf6fb; --muted: #aecbd9; --accent: #5fd2f0;
-    --accent-soft: rgba(95, 210, 240, .18); --code-bg: #204d6b;
-    --splash: #143d56;
+    --bg: #08202f;
+    --bg-grad: linear-gradient(180deg, #08202f 0%, #0f3145 45%, #133f59 100%);
+    --nav-bg: rgba(8, 32, 47, .86);
+    --surface: rgba(19, 50, 70, .9); --border: #35708f;
+    --text: #e7f3f9; --muted: #a3c3d3; --accent: #52c8e8;
+    --accent-soft: rgba(82, 200, 232, .18); --code-bg: #1a4159;
+    --splash: #10334a;
   }
 }
 * { box-sizing: border-box; }
@@ -220,12 +220,12 @@ a { color: inherit; text-decoration: none; }
 <script>try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var d=sessionStorage.getItem('wave-dir');if(d){document.documentElement.setAttribute('data-wave',d);}sessionStorage.removeItem('wave-dir');}}catch(e){}</script>
 </head>
 <body>
-<nav class="nav"><div class="nav-inner"><a class="brand" href="index.html">K!M0&#x27;s Page</a><div class="links"><a href="#projects">프로젝트</a><a href="#agents">에이전트</a><a href="#skills">스킬</a></div></div></nav><header class="hero"><p class="eyebrow">PORTFOLIO · 2026</p><h1>K!M0&#x27;s Page</h1><p class="tagline">나의 성장 일기</p></header><div class="wave" aria-hidden="true"><svg class="w1" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="currentColor"/></svg><svg class="w2" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="currentColor"/></svg></div><main class="feed"><section class="group" id="projects"><p class="section-label">Projects <span>프로젝트</span></p><a class="row" href="fish-data-platform.html"><div class="tile" style="background:linear-gradient(135deg,hsl(353 78% 64%),hsl(33 80% 50%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">어업 데이터·직거래 플랫폼 (fish-data-platform)</h2></div></a></section>
-<section class="group" id="agents"><p class="section-label">Agents <span>에이전트</span></p><a class="row" href="skills-manager.html"><div class="tile" style="background:linear-gradient(135deg,hsl(132 78% 64%),hsl(172 80% 50%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">스킬 해설 작업대 (skills-manager)</h2></div></a>
-<a class="row" href="planner-agent.html"><div class="tile" style="background:linear-gradient(135deg,hsl(351 78% 64%),hsl(31 80% 50%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">MVP 계획 에이전트 (planner-agent)</h2></div></a>
-<a class="row" href="pm-agent.html"><div class="tile" style="background:linear-gradient(135deg,hsl(76 78% 64%),hsl(116 80% 50%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">기획 문서 에이전트 (pm-agent)</h2></div></a>
-<details class="overflow"><summary>더 보기 (1)</summary><a class="row" href="research-agent.html"><div class="tile" style="background:linear-gradient(135deg,hsl(347 78% 64%),hsl(27 80% 50%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">리서치 에이전트 (research-agent)</h2></div></a></details></section>
-<section class="group" id="skills"><p class="section-label">Skills <span>스킬</span></p><a class="row" href="claude-skills.html"><div class="tile" style="background:linear-gradient(135deg,hsl(79 78% 64%),hsl(119 80% 50%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">Claude Code 개인 스킬 시스템</h2></div></a></section></main><footer class="foot">© 2026 K!M0&#x27;s Page</footer><div class="splash" aria-hidden="true"><div class="splash-water"><svg class="crest crest-top" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg><svg class="crest crest-bottom" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg></div></div>
+<nav class="nav"><div class="nav-inner"><a class="brand" href="index.html">K!M0&#x27;s Page</a><div class="links"><a href="#projects">프로젝트</a><a href="#agents">에이전트</a><a href="#skills">스킬</a></div></div></nav><header class="hero"><p class="eyebrow">PORTFOLIO · 2026</p><h1>K!M0&#x27;s Page</h1><p class="tagline">나의 성장 일기</p></header><div class="wave" aria-hidden="true"><svg class="w1" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="currentColor"/></svg><svg class="w2" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="currentColor"/></svg></div><main class="feed"><section class="group" id="projects"><p class="section-label">Projects <span>프로젝트</span></p><a class="row" href="fish-data-platform.html"><div class="tile" style="background:linear-gradient(135deg,hsl(353 72% 58%),hsl(33 74% 45%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">어업 데이터·직거래 플랫폼 (fish-data-platform)</h2></div></a></section>
+<section class="group" id="agents"><p class="section-label">Agents <span>에이전트</span></p><a class="row" href="skills-manager.html"><div class="tile" style="background:linear-gradient(135deg,hsl(132 72% 58%),hsl(172 74% 45%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">스킬 해설 작업대 (skills-manager)</h2></div></a>
+<a class="row" href="planner-agent.html"><div class="tile" style="background:linear-gradient(135deg,hsl(351 72% 58%),hsl(31 74% 45%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">MVP 계획 에이전트 (planner-agent)</h2></div></a>
+<a class="row" href="pm-agent.html"><div class="tile" style="background:linear-gradient(135deg,hsl(76 72% 58%),hsl(116 74% 45%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">기획 문서 에이전트 (pm-agent)</h2></div></a>
+<details class="overflow"><summary>더 보기 (1)</summary><a class="row" href="research-agent.html"><div class="tile" style="background:linear-gradient(135deg,hsl(347 72% 58%),hsl(27 74% 45%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">리서치 에이전트 (research-agent)</h2></div></a></details></section>
+<section class="group" id="skills"><p class="section-label">Skills <span>스킬</span></p><a class="row" href="claude-skills.html"><div class="tile" style="background:linear-gradient(135deg,hsl(79 72% 58%),hsl(119 74% 45%))"><i class="dolphin"></i></div><div class="row-body"><h2 class="row-title">Claude Code 개인 스킬 시스템</h2></div></a></section></main><footer class="foot">© 2026 K!M0&#x27;s Page</footer><div class="splash" aria-hidden="true"><div class="splash-water"><svg class="crest crest-top" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg><svg class="crest crest-bottom" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg></div></div>
 <script>
 (function () {
   var root = document.documentElement;
