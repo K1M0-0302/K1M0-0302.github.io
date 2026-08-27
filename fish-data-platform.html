@@ -73,9 +73,12 @@ a { color: inherit; text-decoration: none; }
 /* 파도 아래 바다의 생물들 — 본문 뒤에 깔린 실루엣. 화면에 고정돼 스크롤해도 계속 헤엄친다.
    밤하늘 블록은 불투명해서 파도 위로는 보이지 않는다. */
 .sealife {
-  position: fixed; inset: 0; z-index: -1;
+  position: fixed; inset: 0; z-index: 0;
   pointer-events: none; overflow: hidden; color: var(--foam);
 }
+/* 본문·푸터는 바다 생물 위에 온다 — 이래야 글 상자의 backdrop-filter 가 생물을 흐린다 */
+.feed, .article, .foot { position: relative; z-index: 1; }
+.night { z-index: 1; }
 .school, .whale { position: absolute; left: 0; will-change: transform; }
 .school {
   width: 170px; height: 76px;
@@ -217,7 +220,9 @@ a { color: inherit; text-decoration: none; }
   display: flex; gap: 14px; align-items: center;
   padding: 14px 18px;
   background: var(--surface); border: 1px solid var(--hairline);
-  border-radius: 10px; backdrop-filter: blur(6px);
+  border-radius: 10px;
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
   transition: background .2s ease, border-color .2s ease;
 }
@@ -263,7 +268,10 @@ a { color: inherit; text-decoration: none; }
 .box {
   background: var(--surface);
   border: 1px solid var(--hairline);
-  border-radius: 10px; padding: 20px 24px; backdrop-filter: blur(6px);
+  border-radius: 10px; padding: 20px 24px;
+  /* 뒤로 지나가는 물고기·고래를 뭉개 글 읽기를 방해하지 않게 한다 */
+  backdrop-filter: blur(16px) saturate(1.15);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
 }
 /* 본문 한 벌: 제목·문단·목록이 같은 서체·같은 리듬.
