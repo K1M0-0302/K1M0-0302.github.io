@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>잘못 베낀 집 — 팩스로 온 방 그림과 소리를 맡다 — K!M0&#x27;s Page</title>
+<meta name="description" content="나의 작은 모험담">
+<meta property="og:title" content="잘못 베낀 집 — 팩스로 온 방 그림과 소리를 맡다 — K!M0&#x27;s Page">
+<meta property="og:description" content="나의 작은 모험담">
+<meta property="og:image" content="https://k1m0-0302.github.io/og-image.png">
+<meta property="og:url" content="https://k1m0-0302.github.io/2026-09-23-copied-house-dot-art.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="K!M0&#x27;s Page">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Jua&family=Nunito:wght@400;700&display=swap">
+<style>
+/* 밤바다 고정 팔레트 (2026-08-27 사용자 결정).
+   `prefers-color-scheme` 분기를 두지 않는다 — 보는 사람의 다크/라이트 설정에 따라 어떤 컴퓨터에선
+   하늘색 바다, 어떤 컴퓨터에선 밤바다로 갈리던 문제를 없애고 누구에게나 같은 화면을 보여준다.
+   수면은 수평선 쪽이 밝고 앞쪽으로 갈수록 깊어진다. */
+:root {
+  --bg: #0f3a57;
+  --bg-grad: linear-gradient(180deg, #0f3a57 0%, #0b2c44 45%, #08202f 100%);
+  --nav-bg: rgba(10, 42, 63, .86);
+  /* 카드는 「반투명 흰 베일」이다 — 배경 위에 늘 같은 비율로 얹히므로, 카드가 화면을 덮는
+     상세 페이지와 배경이 많이 보이는 목록 페이지의 밝기가 구조적으로 같아진다. */
+  --surface: rgba(255, 255, 255, .09); --border: #35708f;
+  --hairline: rgba(255, 255, 255, .13);  /* 유리판 가장자리 — UI 부품 윤곽선처럼 보이지 않게 */
+  --foam: #74c4e6;  /* 달빛 받은 물마루 — 밤하늘·바다 양쪽보다 확실히 밝아야 파도가 보인다 */
+  --text: #e7f3f9; --muted: #a3c3d3; --accent: #52c8e8;
+  /* 배경 위에 직접 놓이는 작은 액센트 글자용 */
+  --accent-strong: #7fd8f2;
+  --accent-soft: rgba(82, 200, 232, .16); --code-bg: rgba(255, 255, 255, .08);
+  --splash: #0a2536;  /* 전환용 — 배경보다 한 단계 깊은 밤바다색 */
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg) var(--bg-grad) no-repeat fixed;
+  color: var(--text);
+  font-family: "Nunito", "Jua", -apple-system, "Segoe UI",
+    "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  /* 주아는 글자가 꽉 차 보여 줄 간격을 넉넉히 준다 */
+  /* 자간은 여기 한 곳에서만 정한다 — 요소마다 다르게 주면 들쭉날쭉해 보인다 */
+  line-height: 1.9; letter-spacing: normal;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+/* 손글씨풍 개구는 사이트 정체성(이름·페이지 제목·카드 제목)에만 쓴다 — 획이 가늘어 한 급 크게 잡는다.
+   본문은 절 제목까지 전부 본문 서체로 읽히게 둔다(섞으면 한 화면에 두 서체가 번갈아 나와 산만하다). */
+.brand, .hero h1, .hero .tagline, .section-label, .row-title, .article-title {
+  font-family: "Gaegu", "Nunito", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--nav-bg);
+  backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 760px; margin: 0 auto; padding: 14px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.brand { font-weight: 700; font-size: 1.15rem; }
+.links { display: flex; gap: 18px; }
+.links a { color: var(--muted); font-size: .95rem; font-weight: 400; }
+.links a:hover { color: var(--accent); }
+.hero { max-width: 760px; margin: 0 auto; padding: 80px 24px 32px; }
+.eyebrow {
+  margin: 0 0 10px; color: var(--accent-strong); font-size: .8rem;
+  font-weight: 700; letter-spacing: .18em;
+}
+.hero h1 {
+  margin: 0; font-size: clamp(2.7rem, 7.5vw, 4.2rem);
+  font-weight: 700;
+}
+.hero .tagline { margin: 10px 0 0; font-size: 1.6rem; color: var(--muted); }
+/* 하위 페이지 머리 — 구조는 홈과 같고 높이만 낮춘다 */
+.page-head { padding: 52px 24px 22px; }
+.page-head h1 { font-size: clamp(2.1rem, 6vw, 3rem); }
+/* 파도 아래 바다의 생물들 — 본문 뒤에 깔린 실루엣. 화면에 고정돼 스크롤해도 계속 헤엄친다.
+   밤하늘 블록은 불투명해서 파도 위로는 보이지 않는다. */
+.sealife {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden; color: var(--foam);
+}
+/* 본문·푸터는 바다 생물 위에 온다 — 이래야 글 상자의 backdrop-filter 가 생물을 흐린다 */
+.feed, .article, .foot { position: relative; z-index: 1; }
+.night { z-index: 1; }
+.school, .whale { position: absolute; left: 0; will-change: transform; }
+.school {
+  width: 170px; height: 76px;
+  animation-name: swim-by; animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.fish-slot { position: absolute; display: block; }
+/* 지느러미·눈이 보이려면 실루엣이 너무 작으면 안 된다 */
+.fish { display: block; width: 26px; height: 13px; }
+.whale {
+  top: 62%; width: 250px; opacity: .42;
+  animation: swim-by 20s linear infinite;
+}
+/* 스프라이트 4칸을 가로로 이어 붙였다(칸 300x165). 마스크 폭을 400% 로 잡고 한 칸씩 건너뛴다 —
+   steps(4,end) 는 0/25/50/75% 를 취하므로 끝값이 133.3333% 여야 네 칸을 정확히 순회한다. */
+.whale-shape {
+  display: block; width: 100%; aspect-ratio: 300 / 165;
+  background: currentColor;
+  -webkit-mask: url(whale-sprite.png) 0 0 / 400% 100% no-repeat;
+  mask: url(whale-sprite.png) 0 0 / 400% 100% no-repeat;
+  animation: whale-swim 1.15s steps(4) infinite;
+}
+@keyframes whale-swim {
+  from { -webkit-mask-position: 0% 0; mask-position: 0% 0; }
+  to   { -webkit-mask-position: 133.3333% 0; mask-position: 133.3333% 0; }
+}
+/* 한 번 지나간 뒤 화면 밖에서 쉬다가 다시 온다 — 계속 가로지르면 산만하다 */
+@keyframes swim-by {
+  0%   { transform: translateX(108vw); opacity: 0; }
+  6%   { opacity: 1; }
+  52%  { opacity: 1; }
+  58%  { transform: translateX(-30vw); opacity: 0; }
+  100% { transform: translateX(-30vw); opacity: 0; }
+}
+/* 양 옆 가장자리의 공기방울 — 바다 생물과 같은 층(z-index 0)이라 본문 뒤로 깔리고,
+   글 상자의 backdrop-filter 가 지나가는 방울을 흐린다. 기둥 폭은 본문(760px) 바깥 여백에
+   맞춰 좁게 잡는다. */
+.bubbles {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+.bubble-column {
+  position: absolute; top: 0; bottom: 0;
+  width: clamp(56px, 9vw, 120px);
+}
+.bubble-column.left { left: 0; }
+.bubble-column.right { right: 0; }
+/* 물방울은 속이 비고 위쪽에 빛점이 하나 — 단색 원으로 칠하면 구슬처럼 보인다 */
+.bubble {
+  position: absolute; bottom: -8%; display: block; border-radius: 50%; opacity: 0;
+  border: 1px solid rgba(255, 255, 255, .45);
+  background: radial-gradient(circle at 32% 28%,
+    rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, .16) 38%, rgba(255, 255, 255, .04) 72%);
+  animation-name: bubble-rise; animation-timing-function: linear;
+  animation-iteration-count: infinite; will-change: transform;
+}
+/* 곧게 오르지 않고 좌우로 조금씩 흔들린다 — 실제 물속 기포의 움직임 */
+@keyframes bubble-rise {
+  0%   { transform: translate3d(0, 0, 0) scale(.85); opacity: 0; }
+  8%   { opacity: var(--o); }
+  35%  { transform: translate3d(9px, -38vh, 0) scale(1); }
+  70%  { transform: translate3d(-7px, -76vh, 0) scale(1.05); opacity: var(--o); }
+  100% { transform: translate3d(4px, -112vh, 0) scale(1.1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sealife { display: none; }
+  .whale-shape { animation: none; }
+  .bubbles { display: none; }
+}
+
+/* 밤바다 — 파도 위쪽은 밤하늘, 파도가 아래의 낮 바다를 오려내듯 드러낸다 */
+.night {
+  position: relative; overflow: hidden;
+  /* 수평선 쪽으로 갈수록 밝아진다 — 바다(--bg #0f3a57)보다 확실히 밝아야 물과 하늘이 갈린다 */
+  background: linear-gradient(180deg, #061727 0%, #0d3252 55%, #1d5a80 100%);
+}
+.night-nav {
+  background: rgba(6, 23, 39, .82); border-bottom-color: rgba(255, 255, 255, .12);
+}
+.night-nav .brand { color: #f2f9fd; }
+.night-nav .links a { color: #a9c9dd; }
+.night-nav .links a:hover { color: #7fd8f2; }
+.night .hero h1 { color: #ffffff; }
+.night .hero .tagline { color: #b7d3e6; }
+.night .eyebrow { color: #7fd8f2; }
+.stars { position: absolute; inset: 0; pointer-events: none; }
+.star {
+  position: absolute; display: block; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 4px rgba(255, 255, 255, .7);
+  animation-name: twinkle; animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+@keyframes twinkle { 0%, 100% { opacity: .28; } 50% { opacity: 1; } }
+/* 파도는 페이지 배경색으로 칠해 밤하늘을 잘라낸다 */
+.night .wave { color: var(--bg); }
+@media (prefers-reduced-motion: reduce) { .star { animation: none; opacity: .8; } }
+
+/* 히어로 아래 바다 띠: 파도 + 그 위에 뜬 종이배 */
+.seascape { position: relative; padding-top: 40px; margin: -8px 0 4px; }
+.wave {
+  position: relative; z-index: 1; height: 44px; overflow: hidden;
+  color: var(--accent-soft);
+}
+.boat {
+  /* 물마루(수면)는 파도 띠 아래에서 약 21px 지점이다. 선체가 그보다 아래로 내려와야
+     물에 잠겨 보인다 — 수면과 같은 높이에 두면 물 위에 얹힌 것처럼 붕 뜬다. */
+  position: absolute; z-index: 0; bottom: 8px; left: 14%;
+  width: 62px; height: 46px;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  animation: drift 19s ease-in-out infinite alternate;
+}
+.boat:focus-visible { outline: 2px solid #7fd8f2; outline-offset: 4px; border-radius: 6px; }
+.boat:active .boat-bob { transform: scale(.94); }
+
+/* 배를 누르면 밤하늘을 가로지르는 별똥별 (JS 가 .shooting 하나를 잠깐 붙였다 뗀다) */
+.shooting {
+  position: absolute; z-index: 2; width: 110px; height: 2px;
+  pointer-events: none; border-radius: 2px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, .95));
+  transform-origin: 100% 50%;
+  animation: shoot 1.05s cubic-bezier(.3, .1, .6, 1) forwards;
+}
+.shooting::after {           /* 머리의 밝은 점 */
+  content: ""; position: absolute; right: -2px; top: 50%;
+  width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 10px 3px rgba(255, 255, 255, .8);
+}
+/* 146° 방향(왼쪽 아래)으로 흐른다 — 꼬리는 반대편 오른쪽 위로 늘어진다 */
+@keyframes shoot {
+  0%   { transform: rotate(146deg) translateX(0); opacity: 0; }
+  12%  { opacity: 1; }
+  100% { transform: rotate(146deg) translateX(360px); opacity: 0; }
+}
+.boat-bob {
+  width: 100%; height: 100%;
+  /* 그림자를 짙게 깔면 물 위에 떠 있는 게 아니라 공중에 뜬 것처럼 보인다 — 아주 옅게만 */
+  filter: drop-shadow(0 1px 2px rgba(6, 40, 62, .16));
+  animation: bob 4.6s ease-in-out infinite;
+}
+@keyframes drift { from { transform: translateX(-26px); } to { transform: translateX(34px); } }
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-2.5deg); }
+  50%      { transform: translateY(-2.5px) rotate(2.5deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .boat, .boat-bob { animation: none; }
+}
+.wave svg {
+  position: absolute; bottom: 0; left: 0;
+  width: 200%; height: 44px; display: block;
+}
+/* 포말은 채움보다 살짝 위에 놓여 물마루 위로 밝은 선만 남는다 */
+.wave .foam { bottom: 3px; animation: drift 11s linear infinite; }
+.wave .foam-2 { bottom: 2px; animation: drift 7s linear infinite reverse; opacity: .5; }
+.wave .w1 { animation: drift 11s linear infinite; }
+.wave .w2 { animation: drift 7s linear infinite reverse; opacity: .55; }
+@keyframes drift { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .wave svg { animation: none; } }
+.group { display: flex; flex-direction: column; gap: 12px; scroll-margin-top: 72px; }
+.group + .group { margin-top: 24px; }
+.section-label {
+  margin: 0 0 4px; font-weight: 700; font-size: 1.35rem;
+}
+.section-label span { color: var(--muted); font-weight: 400; font-size: .9rem; margin-left: 6px; }
+.feed {
+  max-width: 760px; margin: 0 auto; padding: 8px 24px 64px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.row {
+  display: flex; gap: 14px; align-items: center;
+  padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: 10px;
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
+  transition: background .2s ease, border-color .2s ease;
+}
+/* 카드는 링크라 반응이 있어야 하지만, 떠오르는 대신 물빛이 밝아지는 정도로만 */
+.row:hover { background: rgba(255, 255, 255, .15); border-color: rgba(255, 255, 255, .24); }
+.row::after {
+  content: "→"; margin-left: auto; color: var(--muted);
+  font-size: 1.05rem; font-weight: 700;
+}
+.row:hover::after { color: var(--accent); }
+.tile {
+  flex: 0 0 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+/* 타일 그림은 마스크로 씌운다 — 그림 자체는 흰색으로만 칠해지고 타일 색이 배경이 된다 */
+.tile-icon {
+  display: block; width: 74%; height: 74%; background: #fff;
+  -webkit-mask: url(boat-icon.png) center/contain no-repeat;
+  mask: url(boat-icon.png) center/contain no-repeat;
+}
+.row-body { min-width: 0; }
+.row-title { margin: 0; font-size: 1.3rem; font-weight: 700; }
+.more { color: var(--accent-strong); font-weight: 400; font-size: .9rem; }
+.overflow > summary {
+  cursor: pointer; list-style: none; text-align: center;
+  color: var(--accent); font-weight: 400; font-size: .9rem;
+  padding: 10px; border: 1px dashed var(--border); border-radius: 12px;
+}
+.overflow > summary::-webkit-details-marker { display: none; }
+.overflow[open] > summary { margin-bottom: 12px; }
+.overflow[open] > .row + .row { margin-top: 12px; }
+.article { max-width: 760px; margin: 0 auto; padding: 28px 24px 64px; }
+.article-title {
+  margin: 6px 0 20px; font-size: clamp(2.1rem, 6vw, 3rem);
+  font-weight: 700;
+}
+.back { display: inline-block; margin-top: 32px; }
+.title-ko { color: var(--muted); font-size: .55em; font-weight: 400; margin-left: 6px; }
+/* 박스 사이를 목록 카드 간격(12px)보다 넉넉히 벌려 배경 물빛이 그만큼 드러나게 한다 */
+.body { display: flex; flex-direction: column; gap: 20px; }
+/* 본문 박스는 읽는 종이지 눌리는 버튼이 아니다 — 색 띠(알림 상자 관용구)·그림자·호버 반응을 빼고
+   물 위에 얹힌 유리판처럼 가는 테두리와 윗면 하이라이트만 남긴다. */
+.box {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 10px; padding: 20px 24px;
+  /* 뒤로 지나가는 물고기·고래를 뭉개 글 읽기를 방해하지 않게 한다 */
+  backdrop-filter: blur(16px) saturate(1.15);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+/* 본문 한 벌: 제목·문단·목록이 같은 서체·같은 리듬.
+   주아는 굵기가 400 하나뿐이라 700 을 걸면 합성 볼드로 뭉개진다 — 위계는 크기와 색으로 준다. */
+.body { font-size: 1.02rem; }
+.body h2 {
+  margin: 0 0 10px; font-size: 1.2rem; font-weight: 400;
+  color: var(--accent-strong);
+}
+.body h3 { margin: 18px 0 6px; font-size: 1.06rem; font-weight: 400; color: var(--text); }
+.body p { margin: 8px 0; }
+.body ul, .body ol { margin: 8px 0; padding-left: 22px; }
+.body li { margin: 6px 0; }
+/* 굵게 표시는 색을 밝혀서 구분한다(합성 볼드를 피한다) */
+.body strong { font-weight: 400; color: #ffffff; }
+.body code {
+  background: var(--code-bg); padding: 2px 6px; border-radius: 6px;
+  font-size: .88em; font-family: ui-monospace, Consolas, monospace;
+}
+.empty { text-align: center; color: var(--muted); padding: 48px 0; }
+.foot {
+  max-width: 760px; margin: 0 auto; padding: 0 24px 48px;
+  color: var(--muted); font-size: .85rem; text-align: center;
+}
+/* 카드 클릭 순간: 카드에서 물결이 번진다 */
+.row.splashing {
+  transform: scale(.985);
+  /* 어두운 배경에선 짙은 그림자가 안 보인다 — 물빛 테두리로 눌린 것을 알린다 */
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.row.splashing::before {
+  content: ""; position: absolute; inset: 0; border-radius: 12px;
+  border: 2px solid var(--accent); opacity: .8;
+  animation: ripple .6s ease-out forwards;
+}
+.row { position: relative; }
+@keyframes ripple {
+  to { transform: scale(1.06); opacity: 0; }
+}
+
+/* 페이지 전환 = 파도가 모래사장에 밀려왔다 물러나는 한 번의 왕복.
+   물은 늘 아래(바다 쪽)에서 올라와 덮고, 새 페이지 위에서 왔던 쪽으로 다시 빠진다.
+   이동은 transform 하나로만(레이아웃 없음) 해서 매끄럽다. */
+.splash {
+  position: fixed; inset: 0; z-index: 50; pointer-events: none;
+  visibility: hidden; overflow: hidden; color: var(--splash);
+}
+.splash.active, :root[data-tide="cover"] .splash { visibility: visible; }
+.splash-water {
+  position: absolute; left: 0; width: 100%; height: 100%;
+  background: var(--splash); transform: translateY(100%);
+  will-change: transform;
+}
+:root[data-tide="cover"] .splash-water { transform: translateY(0); }  /* 도착 시 이미 덮인 상태 */
+.crest { position: absolute; left: 0; width: 100%; height: 46px; display: block; }
+.crest-top { top: -45px; }
+/* 포말선은 물마루보다 한 뼘 앞서 달린다 — 파도가 밀려오는 방향을 이 선이 알려준다 */
+.crest-foam {
+  top: -58px; color: var(--foam); opacity: .5;
+  filter: blur(.3px);
+}
+
+/* 밀물: 빠르게 밀려와 모래 위에서 힘이 빠지며 멈춘다(감속). 끝에서 살짝 더 밀고 들어간다. */
+.splash.washing-in .splash-water {
+  animation: tide-in .62s cubic-bezier(.22, .68, .36, 1) forwards;
+}
+@keyframes tide-in {
+  from { transform: translateY(100%); }
+  74%  { transform: translateY(5%); }
+  to   { transform: translateY(0); }
+}
+/* 썰물: 잠깐 머뭇하다 풀려서 점점 빨라지며 바다로 끌려 내려간다(가속).
+   너무 뒤에 몰린 곡선을 쓰면 화면이 덮인 채 멎어 보인다 — 60% 지점에 절반쯤은 빠져야 한다. */
+.splash.washing-out .splash-water {
+  animation: tide-out .8s cubic-bezier(.42, .06, .62, .72) forwards;
+  animation-delay: .12s;
+}
+@keyframes tide-out {
+  from { transform: translateY(0); }
+  10%  { transform: translateY(2%); }
+  to   { transform: translateY(100%); }
+}
+/* 물이 빠진 자리에 남는 젖은 모래 자국 — 아래쪽일수록 오래 젖어 있다 */
+.wet-sand {
+  position: absolute; inset: 0; opacity: 0;
+  background: linear-gradient(180deg,
+    rgba(116, 196, 230, 0) 0%, rgba(116, 196, 230, .07) 55%, rgba(116, 196, 230, .16) 100%);
+}
+.splash.washing-out .wet-sand { animation: wet-fade .92s ease-out forwards; }
+@keyframes wet-fade {
+  0%   { opacity: 1; }
+  55%  { opacity: .5; }
+  100% { opacity: 0; }
+}
+
+/* 물 없이 바로 열었을 때만 본문이 떠오른다 (전환으로 왔으면 물이 걷히며 이미 드러난다) */
+:root:not([data-tide]) .arrive { animation: surface .5s cubic-bezier(.2, .7, .3, 1) both; }
+@keyframes surface {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash { display: none; }
+  .row.splashing::before { animation: none; }
+  :root:not([data-tide]) .arrive { animation: none; }
+}
+/* ── 항해일지 (2026-10-06) ── */
+/* 연재 거르개: 물 위에 뜬 작은 부표 같은 알약 단추 */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 8px; }
+.chip {
+  font: inherit; font-size: .9rem; color: var(--muted); cursor: pointer;
+  padding: 4px 12px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--hairline);
+}
+.chip span { opacity: .7; margin-left: 2px; }
+.chip:hover { color: var(--text); }
+.chip.on { color: #06202f; background: var(--accent-strong); border-color: var(--accent-strong); }
+.chip:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 2px; }
+.month[hidden], .log[hidden] { display: none; }
+/* 일지 카드: 왼쪽 표지 사진 + 오른쪽 날짜·제목·요약 */
+.log { align-items: stretch; gap: 16px; }
+.log::after { align-self: center; }
+.thumb {
+  flex: 0 0 132px; aspect-ratio: 4 / 3; border-radius: 8px; overflow: hidden;
+  background: #e9f3f8;
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+.log .tile { flex: 0 0 132px; height: auto; aspect-ratio: 4 / 3; border-radius: 8px; }
+.log .tile-icon { width: 46%; height: 46%; }
+.log .row-body { display: flex; flex-direction: column; justify-content: center; }
+.log-meta { margin: 0; font-size: .82rem; color: var(--muted); line-height: 1.5; }
+.log-series { color: var(--accent-strong); }
+.log .row-title { line-height: 1.3; margin: 2px 0 4px; }
+.log-summary { margin: 0; font-size: .92rem; color: var(--muted); line-height: 1.6; }
+/* 글머리: 날짜·연재 줄과 태그 */
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; }
+.tags li {
+  font-size: .8rem; color: #cfe6f2; padding: 1px 10px; border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .22);
+}
+/* 본문 사진: 종이 액자 — 어두운 유리판 위에서도 스크린샷 색이 그대로 읽힌다 */
+.shot {
+  margin: 16px 0; padding: 8px 8px 4px; border-radius: 8px;
+  background: #f4f8fa; box-shadow: 0 6px 18px rgba(2, 16, 26, .35);
+}
+.shot img { display: block; width: 100%; height: auto; border-radius: 4px; }
+.shot figcaption {
+  color: #35566a; font-size: .86rem; line-height: 1.5; padding: 6px 4px 4px; text-align: center;
+}
+.ink { color: var(--accent-strong); border-bottom: 1px solid rgba(127, 216, 242, .4); }
+.ink:hover { border-bottom-color: var(--accent-strong); }
+/* 같은 연재 글 목록 */
+.series-box ol { margin: 6px 0 0; padding-left: 22px; }
+.series-box li { margin: 4px 0; }
+.series-box time { color: var(--muted); font-size: .85rem; margin-right: 6px; }
+.series-box a:hover { color: var(--accent-strong); }
+.series-box .here { color: var(--accent-strong); }
+@media (max-width: 560px) {
+  .hero { padding-top: 56px; }
+  .log { flex-direction: column; gap: 10px; }
+  .log::after { display: none; }
+  .thumb, .log .tile { flex: none; width: 100%; aspect-ratio: 16 / 9; }
+  .feed, .article, .hero, .nav-inner { padding-left: 16px; padding-right: 16px; }
+  .box { padding: 16px; }
+}
+
+</style>
+<script>try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){if(sessionStorage.getItem('tide')){document.documentElement.setAttribute('data-tide','cover');}sessionStorage.removeItem('tide');}}catch(e){}</script>
+</head>
+<body>
+<div class="bubbles" aria-hidden="true"><div class="bubble-column left"><i class="bubble" style="left:18%;width:14px;height:14px;animation-duration:17s;animation-delay:0.0s;--o:0.4"></i><i class="bubble" style="left:62%;width:9px;height:9px;animation-duration:21s;animation-delay:3.5s;--o:0.3"></i><i class="bubble" style="left:36%;width:20px;height:20px;animation-duration:25s;animation-delay:7.0s;--o:0.34"></i><i class="bubble" style="left:78%;width:7px;height:7px;animation-duration:15s;animation-delay:11.0s;--o:0.26"></i><i class="bubble" style="left:8%;width:12px;height:12px;animation-duration:23s;animation-delay:14.5s;--o:0.32"></i><i class="bubble" style="left:52%;width:16px;height:16px;animation-duration:19s;animation-delay:18.0s;--o:0.28"></i></div><div class="bubble-column right"><i class="bubble" style="left:18%;width:14px;height:14px;animation-duration:17s;animation-delay:9.5s;--o:0.4"></i><i class="bubble" style="left:62%;width:9px;height:9px;animation-duration:21s;animation-delay:13.0s;--o:0.3"></i><i class="bubble" style="left:36%;width:20px;height:20px;animation-duration:25s;animation-delay:16.5s;--o:0.34"></i><i class="bubble" style="left:78%;width:7px;height:7px;animation-duration:15s;animation-delay:20.5s;--o:0.26"></i><i class="bubble" style="left:8%;width:12px;height:12px;animation-duration:23s;animation-delay:24.0s;--o:0.32"></i><i class="bubble" style="left:52%;width:16px;height:16px;animation-duration:19s;animation-delay:27.5s;--o:0.28"></i></div></div><div class="arrive"><nav class="nav night-nav"><div class="nav-inner"><a class="brand" href="index.html">K!M0&#x27;s Page</a><div class="links"><a href="index.html">← 항해일지</a></div></div></nav><div class="night"><div class="stars" aria-hidden="true"><i class="star" style="left:32.74%;top:15.16%;width:2.31px;height:2.31px;animation-delay:0.26s;animation-duration:4.09s"></i><i class="star" style="left:36.84%;top:8.29%;width:2.11px;height:2.11px;animation-delay:0.13s;animation-duration:3.84s"></i><i class="star" style="left:7.85%;top:10.71%;width:1.99px;height:1.99px;animation-delay:2.98s;animation-duration:3.1s"></i><i class="star" style="left:22.88%;top:50.43%;width:2.73px;height:2.73px;animation-delay:2.08s;animation-duration:3.75s"></i><i class="star" style="left:96.67%;top:7.45%;width:2.6px;height:2.6px;animation-delay:1.04s;animation-duration:3.15s"></i><i class="star" style="left:12.54%;top:26.83%;width:2.54px;height:2.54px;animation-delay:0.65s;animation-duration:4.2s"></i><i class="star" style="left:63.61%;top:31.56%;width:2.17px;height:2.17px;animation-delay:0.23s;animation-duration:2.94s"></i><i class="star" style="left:21.18%;top:54.35%;width:2.0px;height:2.0px;animation-delay:1.13s;animation-duration:4.21s"></i><i class="star" style="left:45.41%;top:26.18%;width:2.51px;height:2.51px;animation-delay:2.52s;animation-duration:3.39s"></i><i class="star" style="left:57.29%;top:42.86%;width:2.63px;height:2.63px;animation-delay:2.63s;animation-duration:3.49s"></i><i class="star" style="left:97.06%;top:12.74%;width:1.99px;height:1.99px;animation-delay:2.73s;animation-duration:3.16s"></i><i class="star" style="left:48.92%;top:6.9%;width:2.34px;height:2.34px;animation-delay:2.75s;animation-duration:4.18s"></i><i class="star" style="left:86.8%;top:27.22%;width:2.37px;height:2.37px;animation-delay:2.14s;animation-duration:4.19s"></i><i class="star" style="left:45.71%;top:66.16%;width:2.72px;height:2.72px;animation-delay:1.71s;animation-duration:4.39s"></i><i class="star" style="left:6.95%;top:55.91%;width:2.31px;height:2.31px;animation-delay:3.58s;animation-duration:4.77s"></i><i class="star" style="left:28.89%;top:32.55%;width:2.34px;height:2.34px;animation-delay:0.08s;animation-duration:3.91s"></i><i class="star" style="left:17.47%;top:12.67%;width:1.48px;height:1.48px;animation-delay:2.77s;animation-duration:3.11s"></i><i class="star" style="left:25.27%;top:32.93%;width:2.62px;height:2.62px;animation-delay:0.29s;animation-duration:3.88s"></i><i class="star" style="left:54.85%;top:69.37%;width:2.55px;height:2.55px;animation-delay:3.11s;animation-duration:3.47s"></i><i class="star" style="left:41.7%;top:30.55%;width:2.64px;height:2.64px;animation-delay:3.45s;animation-duration:3.16s"></i><i class="star" style="left:18.27%;top:21.16%;width:1.73px;height:1.73px;animation-delay:1.75s;animation-duration:4.21s"></i><i class="star" style="left:26.75%;top:4.3%;width:1.99px;height:1.99px;animation-delay:1.33s;animation-duration:4.16s"></i><i class="star" style="left:94.4%;top:55.1%;width:2.12px;height:2.12px;animation-delay:2.22s;animation-duration:4.42s"></i><i class="star" style="left:6.29%;top:70.57%;width:2.49px;height:2.49px;animation-delay:3.15s;animation-duration:4.71s"></i><i class="star" style="left:39.45%;top:33.52%;width:1.54px;height:1.54px;animation-delay:2.28s;animation-duration:2.95s"></i><i class="star" style="left:7.6%;top:19.45%;width:1.63px;height:1.63px;animation-delay:1.22s;animation-duration:2.93s"></i><i class="star" style="left:1.02%;top:15.19%;width:1.54px;height:1.54px;animation-delay:1.31s;animation-duration:2.86s"></i><i class="star" style="left:86.68%;top:49.44%;width:1.61px;height:1.61px;animation-delay:0.91s;animation-duration:3.63s"></i><i class="star" style="left:36.69%;top:13.09%;width:2.59px;height:2.59px;animation-delay:3.58s;animation-duration:3.92s"></i><i class="star" style="left:48.42%;top:10.36%;width:1.54px;height:1.54px;animation-delay:1.23s;animation-duration:3.44s"></i><i class="star" style="left:82.23%;top:15.95%;width:1.43px;height:1.43px;animation-delay:3.42s;animation-duration:4.07s"></i><i class="star" style="left:15.37%;top:44.19%;width:1.44px;height:1.44px;animation-delay:1.9s;animation-duration:5.15s"></i><i class="star" style="left:85.61%;top:55.52%;width:1.77px;height:1.77px;animation-delay:1.32s;animation-duration:3.2s"></i><i class="star" style="left:76.65%;top:43.41%;width:2.49px;height:2.49px;animation-delay:1.19s;animation-duration:3.34s"></i></div><header class="hero page-head"><p class="eyebrow">2026. 9. 23. · 잘못 베낀 집</p><h1>잘못 베낀 집 — 팩스로 온 방 그림과 소리를 맡다</h1><ul class="tags"><li>JavaScript</li><li>Python</li><li>numpy</li><li>도트</li><li>Web Audio</li><li>텍스트 게임</li></ul></header><div class="seascape"><div class="wave" aria-hidden="true"><svg class="foam" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--foam)"/></svg><svg class="foam foam-2" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--foam)"/></svg><svg class="w1" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--bg)"/></svg><svg class="w2" viewBox="0 0 2880 60" preserveAspectRatio="none"><path d="M0,32 C240,56 480,8 720,32 C960,56 1200,8 1440,32 C1680,56 1920,8 2160,32 C2400,56 2640,8 2880,32 L2880,60 L0,60 Z" fill="var(--bg)"/></svg></div></div></div><main class="article"><div class="body"><section class="box"><p>「잘못 베낀 집」은 팀원이 설계하고 만든 한국어 텍스트 게임이다. 화면이 팩스 용지 한 장처럼 생겼고, 흑백의 서늘한 분위기 속에서 글을 읽어 나간다. 빌드 도구 없이 브라우저에서 바로 여는 정적 HTML·CSS·JavaScript다.</p><p>게임 설계와 글은 팀원의 몫이다. 나는 9월 23일에 합류해 24일까지 커밋 18개(인계 문서 2개 포함)를 남겼다. 이 글은 그 18개, 곧 그림과 소리와 글 다듬기만 다룬다. 내 커밋은 아직 팀원의 master에 합쳐지지 않은 작업 브랜치에 있다.</p></section><section class="box"><h2>9월 23일 — 사진 대신 두 색 도트</h2><p>원래 계획은 장면 그림을 이미지 생성 도구로 뽑아 1비트 디더로 전송하는 것이었다. 23일에 방향을 바꿨다. 「오브라딘호의 귀환」처럼 잉크색 <code>#1b1b1b</code>와 종이색 <code>#f2f0ea</code> 두 색만 쓰는 320×180 도트로 가기로 했다. 팩스 용지라는 화면과도 맞았다.</p><p>그리는 방식은 작은 3D 렌더러로 정했다. 상자, 원기둥, 평면으로 방을 짓는다. 그다음 문간 눈높이에서 손전등 하나로 비추고, 8×8 Bayer 디더를 건다. 마지막으로 깊이·법선·물체가 바뀌는 곳에 1px 윤곽선을 긋는다. 어두운 면 위의 윤곽선은 종이색으로 그어서 어둠 속에서도 실루엣이 읽히게 했다. numpy와 Pillow만 쓰는 Python 스크립트다.</p><p>처음에는 렌더러를 Codex CLI에 맡겼다. 결과가 좋지 않았다. 2D 손그림 판은 조명 방향이 거꾸로였다. 3D 렌더러 첫 판은 화면의 83%가 검정이었고, 다듬은 판은 전체가 같은 회색이 됐다. 그래서 역할을 나눴다. 조명은 Claude Code 세션에서 직접 다시 짰다. 그림자, 연속 명암에 S 곡선, 빛이 닿는 거리를 손봤다. 공용 렌더러(<code>art-src/render.py</code>)는 고정해 두고, 방마다 장면 파일(<code>art-src/&lt;방&gt;.py</code>)만 서브에이전트들이 나눠 썼다.</p><figure class="shot"><img src="img/copied-house-dot-art/02-rooms.png" alt="같은 렌더러로 찍은 거실, 부엌, 욕실, 안방(2배 확대)" loading="lazy"><figcaption>같은 렌더러로 찍은 거실, 부엌, 욕실, 안방(2배 확대)</figcaption></figure><p>그날 렌더한 그림은 39장이다. 복도와 방 그림, 그리고 물건 클로즈업이다. 39장 모두 320×180이고, 정확히 두 색인지를 스크립트로 검사했다.</p><figure class="shot"><img src="img/copied-house-dot-art/03-photo.png" alt="물건 클로즈업 — 액자 속 가족사진(2배 확대)" loading="lazy"><figcaption>물건 클로즈업 — 액자 속 가족사진(2배 확대)</figcaption></figure><p>그림이 글보다 앞서 무언가를 말해 버리지 않게 하는 데도 신경을 썼다. 물건 배치에 어색한 빈자리가 생기면 고르게 다시 놓았다. 칫솔 그림자가 칫솔 하나가 더 있는 것처럼 보여서 조명 위치를 옮기기도 했다. 컵 벽을 뚫고 나온 칫솔은 입구에서 나오게 고쳤다. 단순한 3D 장면이라 물체가 겹치는 실수가 렌더 결과에서야 보였다.</p></section><section class="box"><h2>판에 맞추기</h2><p>게임 화면의 그림 판은 원래 사진을 런타임에 디더하는 구조였다. 도트 원고(폭 320px 이하)는 디더를 건너뛰고 그대로 싣게 했다. 처음에는 판을 꽉 덮고 위아래를 잘랐다. 그런데 1280×720 창에서 원고의 가운데 일부만 보였다. 그래서 판 안에 통째로 들어가는 배율로 바꿨다. 판 틀도 16:9로 장 폭을 다 쓰게 하고, 그만큼 글 칸과 선택지 높이를 줄였다. 1440×900 이하 창에서는 책상이 조금 스크롤된다. 판을 줄이는 대신 이 스크롤을 받아들이기로 결정했다.</p></section><section class="box"><h2>9월 23~24일 — 음원 없이 만든 소리</h2><p>배경음은 음원 파일 없이 Web Audio로 그 자리에서 만든다. 기성 곡을 쓰면 공개 페이지에서 무단 배포가 되기 때문이다. 구성은 이렇다.</p><ul><li>낮은 드론</li><li>900Hz 부근으로 거른 잡음(방 울림)</li><li>반음·삼온음·단9도처럼 불편한 간격에서 무작위로 고르는 긁는 음</li><li>가끔 나는 FM 금속 울림</li></ul><p>선율은 없고 매번 다르다. 분위기는 장면에 따라 네 가지로 바뀐다.</p><p>게임 오버 소리는 24일에 붙였다. 배경이 2.5초에 걸쳐 물속처럼 먹먹해진다. 그 사이 심장 박동이 점점 느려지다 멎고, 1kHz 삐- 신호음이 남는다. 박동과 신호음은 먹먹해지지 않게 따로 냈다. 귀 안에서 나는 소리라서다.</p><p>노트북 스피커로 들어 보니 배경음이 거의 안 들렸다. 재 보니 드론의 에너지 95%가 100Hz 아래였다. 작은 스피커는 그 대역을 내지 못한다. 220Hz 부근에 톱니파 둘과 삼온음을 몸통으로 올려 100Hz 아래 비중을 약 40%로 낮췄다. 오른쪽 위에는 소리 크기 밀대를 달았다.</p></section><section class="box"><h2>게임 글 다듬기</h2><p>24일에는 게임 글의 시제와 말투를 맞췄다. 지금 겪는 묘사는 현재형, 방금 한 행동의 결과는 과거형으로 통일했다. "귀에 와 닿는다" 같은 억지 몸 표현과 번역투도 풀었다. 예를 들어 "딸깍 소리가 귀에 와 닿는다"는 "딸깍 하는 소리가 난다"가 됐다. 게임 규칙에 걸린 낱말은 건드리지 않았다.</p></section><section class="box"><h2>기술스택</h2><ul><li>게임: 정적 HTML·CSS·JavaScript(빌드 도구 없음), Canvas, Web Audio API, node 내장 테스트 러너</li><li>그림: Python 3, numpy, Pillow(직접 짠 광선 추적 렌더러)</li><li>개발 보조: Claude Code(서브에이전트 병렬), Codex CLI(초기 렌더러 시도)</li></ul></section><section class="box"><h2>배운 점</h2><ul><li>남이 만든 게임에 그림을 넣을 때는 그림이 글보다 먼저 말하지 않는지 따로 봐야 한다. 그림자 하나도 정보가 된다.</li><li>결과를 좌우하는 공용 부분(조명, 렌더러)은 직접 잡고, 반복되는 장면 파일만 나눠 맡기는 편이 빨랐다.</li><li>소리는 사람들이 실제로 들을 노트북·폰 스피커가 내는 대역을 기준으로 짜야 한다. 대역별 에너지를 재 보니 "안 들린다"의 원인이 바로 나왔다.</li><li>정량 성과(플레이어 수 등)는 확인하지 못했다.</li></ul></section></div><a class="more back" href="index.html">← 항해일지로 돌아가기</a></main><footer class="foot">© 2026 K!M0&#x27;s Page</footer></div><div class="splash" aria-hidden="true"><div class="wet-sand"></div><div class="splash-water"><svg class="crest crest-foam" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg><svg class="crest crest-top" viewBox="0 0 2880 140" preserveAspectRatio="none"><path d="M0,40 C240,64 480,16 720,40 C960,64 1200,16 1440,40 C1680,64 1920,16 2160,40 C2400,64 2640,16 2880,40 L2880,140 L0,140 Z" fill="currentColor"/></svg></div></div>
+<script>
+(function () {
+  var root = document.documentElement;
+  var splash = document.querySelector('.splash');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!splash) return;
+
+  // 도착: 덮고 있던 물이 잠깐 머물다 왔던 쪽(아래)으로 빠지며 새 페이지가 드러난다.
+  // 물러나는 시간(.86s) + 머무는 시간(.16s) 이 지나야 덮개를 걷는다.
+  // 표시는 지우지 않고 '끝남'으로 바꾼다 — 지우면 `:root:not([data-tide]) .arrive` 가 그제서야
+  // 들어맞아 본문이 한 번 더 페이드인한다(2026-08-27 실측 버그).
+  if (root.getAttribute('data-tide') === 'cover' && !reduce) {
+    splash.classList.add('active', 'washing-out');
+    setTimeout(function () {
+      splash.className = 'splash';
+      root.setAttribute('data-tide', 'done');
+    }, 960);
+  }
+
+  // 사이트 안의 링크는 전부 같은 파도를 탄다 — 링크마다 다르게 굴면 산만하다.
+  document.querySelectorAll("a[href$='.html']").forEach(function (link) {
+    link.addEventListener('click', function (ev) {
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
+      var href = link.getAttribute('href');
+      if (!href || reduce) return;
+      ev.preventDefault();
+      if (link.classList.contains('row')) link.classList.add('splashing');
+      try { sessionStorage.setItem('tide', '1'); } catch (e) {}
+      splash.className = 'splash active washing-in';
+      // 화면이 완전히 덮인 뒤에 넘어간다 — 일찍 넘기면 전환이 새 페이지에서 끊겨 보인다
+      setTimeout(function () { location.href = href; }, 560);
+    });
+  });
+
+  // 종이배를 누르면 밤하늘에 별똥별이 하나 떨어진다
+  var boat = document.querySelector('.boat');
+  var sky = document.querySelector('.night');
+  if (boat && sky) {
+    boat.addEventListener('click', function () {
+      if (reduce) return;
+      if (sky.querySelectorAll('.shooting').length >= 4) return;  // 연타해도 하늘이 안 뒤덮이게
+      var star = document.createElement('i');
+      star.className = 'shooting';
+      star.style.top = (4 + Math.random() * 34) + '%';
+      star.style.left = (46 + Math.random() * 40) + '%';
+      sky.appendChild(star);
+      setTimeout(function () { star.remove(); }, 1200);
+    });
+  }
+
+  // 뒤로가기(bfcache)로 돌아오면 덮여 있던 물을 걷어낸다
+  window.addEventListener('pageshow', function (ev) {
+    if (ev.persisted) { splash.className = 'splash'; root.setAttribute('data-tide', 'done'); }
+  });
+})();
+
+</script>
+</body>
+</html>
